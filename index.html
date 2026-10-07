@@ -1,0 +1,1328 @@
+<title>ALCS Exam Revision</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Literata:opsz,wght@7..72,500;7..72,700&family=Public+Sans:ital,wght@0,400;0,600;0,700;1,400&family=STIX+Two+Text:ital,wght@0,400;0,600;1,400&display=swap">
+<style>
+/* Layout: sticky chapter index on the left, one long reading column on the right; stacks on phones. */
+:root{
+  --bg:#f5f6f8; --surface:#ffffff; --fg:#1b2129; --fg2:#4a5563; --line:#d9dee5;
+  --accent:#0f6b72; --accent-soft:#e3f1f2;
+  --warn:#9a5b00; --warn-soft:#fdf2df;
+  --ok:#2c6e2f; --ok-soft:#e6f3e6;
+  --idea:#4b4fa3; --idea-soft:#ececf9;
+  --t:#1d6b2f; --f:#a3322b;
+  --font-display:"Literata", Georgia, "Times New Roman", serif;
+  --font-body:"Public Sans", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --font-math:"STIX Two Text", "Cambria Math", "Cambria", "Times New Roman", serif;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#11161c; --surface:#18202a; --fg:#e2e7ed; --fg2:#a6b0bc; --line:#2c3743;
+  --accent:#5cc3c9; --accent-soft:#16343a;
+  --warn:#f0b357; --warn-soft:#3a2c14;
+  --ok:#7fcf84; --ok-soft:#1b3320;
+  --idea:#a9adf5; --idea-soft:#262a4a;
+  --t:#7fd38f; --f:#ff8f84; color-scheme:dark; } }
+:root[data-theme="dark"]{
+  --bg:#11161c; --surface:#18202a; --fg:#e2e7ed; --fg2:#a6b0bc; --line:#2c3743;
+  --accent:#5cc3c9; --accent-soft:#16343a;
+  --warn:#f0b357; --warn-soft:#3a2c14;
+  --ok:#7fcf84; --ok-soft:#1b3320;
+  --idea:#a9adf5; --idea-soft:#262a4a;
+  --t:#7fd38f; --f:#ff8f84; color-scheme:dark; }
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto} }
+body{background:var(--bg); color:var(--fg); font-family:var(--font-body); font-size:16.5px; line-height:1.62; margin:0;}
+a{color:var(--accent)}
+a:focus-visible, button:focus-visible, summary:focus-visible{outline:3px solid var(--accent); outline-offset:2px; border-radius:4px}
+
+.topbar{position:sticky; top:env(safe-area-inset-top,0px); z-index:20; background:var(--surface); border-bottom:1px solid var(--line);
+  display:flex; align-items:center; gap:12px; padding:10px 16px;}
+.topbar .brand{font-family:var(--font-display); font-weight:700; font-size:1.05rem; letter-spacing:.01em}
+.topbar .brand small{font-family:var(--font-body); font-weight:400; color:var(--fg2); font-size:.82rem; margin-left:8px}
+.topbar .spacer{flex:1}
+.themebtn{white-space:nowrap; flex:none; font:inherit; font-size:.85rem; border:1px solid var(--line); background:var(--bg); color:var(--fg); border-radius:999px; padding:6px 14px; cursor:pointer}
+.themebtn:hover{border-color:var(--accent)}
+
+.wrap{display:grid; grid-template-columns:270px minmax(0,1fr); gap:36px; max-width:1240px; margin:0 auto; padding-inline:16px; padding-block:24px 80px}
+@media (max-width: 900px){ .wrap{grid-template-columns:minmax(0,1fr); gap:16px} }
+@media (max-width: 520px){ .topbar .brand small{display:none} }
+section.chapter, h3[id]{scroll-margin-top:72px}
+
+.toc{position:sticky; top:calc(env(safe-area-inset-top,0px) + 64px); align-self:start; max-height:calc(100vh - 84px); overflow:auto; font-size:.9rem}
+@media (max-width: 900px){ .toc{position:static; max-height:none} }
+.toc details{background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:10px 12px}
+.toc summary{cursor:pointer; font-weight:700; font-size:.78rem; text-transform:uppercase; letter-spacing:.08em; color:var(--fg2)}
+.toc ol{list-style:none; margin:8px 0 0; padding:0; display:grid; gap:2px}
+.toc li a{display:block; padding:5px 8px; border-radius:6px; color:var(--fg); text-decoration:none}
+.toc li a:hover{background:var(--accent-soft)}
+.toc li a.on{background:var(--accent-soft); color:var(--accent); font-weight:600}
+.toc .lec{color:var(--fg2); font-size:.76rem; margin-right:6px; font-variant-numeric:tabular-nums}
+.toc .sub a{padding-left:22px; font-size:.84rem; color:var(--fg2)}
+
+main{min-width:0}
+.chapter{background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:clamp(18px,3.5vw,40px); margin-bottom:28px}
+.eyebrow{font-size:.75rem; text-transform:uppercase; letter-spacing:.1em; color:var(--accent); font-weight:700}
+h1,h2,h3,h4{font-family:var(--font-display); text-wrap:balance; line-height:1.25}
+h1{font-size:clamp(1.8rem,4vw,2.5rem); margin:.2em 0 .3em}
+h2{font-size:clamp(1.45rem,3vw,1.9rem); margin:.15em 0 .5em}
+h3{font-size:1.22rem; margin:1.8em 0 .5em; padding-top:.6em; border-top:1px solid var(--line)}
+h4{font-size:1.02rem; margin:1.3em 0 .4em; font-family:var(--font-body); font-weight:700}
+p, li{max-width:72ch}
+.lead{font-size:1.06rem; color:var(--fg2)}
+m{font-family:var(--font-math); font-size:1.08em; white-space:nowrap}
+.fm{font-family:var(--font-math); font-size:1.12em; background:var(--bg); border:1px solid var(--line); border-radius:8px; padding:10px 14px; overflow-x:auto; margin:.8em 0; max-width:72ch}
+.tv{color:var(--t); font-weight:600}
+.fv{color:var(--f); font-weight:600}
+
+.box{border-radius:10px; padding:12px 16px; margin:1em 0; max-width:76ch; border:1px solid transparent}
+.box > :first-child{margin-top:0}
+.box > :last-child{margin-bottom:0}
+.box .tag{display:inline-block; font-size:.8rem; font-weight:700; letter-spacing:.02em; margin-bottom:4px}
+.idea{background:var(--idea-soft); border-color:color-mix(in srgb, var(--idea) 30%, transparent)}
+.idea .tag{color:var(--idea)}
+.trap{background:var(--warn-soft); border-color:color-mix(in srgb, var(--warn) 35%, transparent)}
+.trap .tag{color:var(--warn)}
+.exam{background:var(--ok-soft); border-color:color-mix(in srgb, var(--ok) 35%, transparent)}
+.exam .tag{color:var(--ok)}
+.stmt{background:var(--bg); border:1px solid var(--line); border-left:4px solid var(--accent)}
+.stmt .tag{color:var(--accent)}
+.proofidea{font-size:.93rem; color:var(--fg2); margin-top:.5em}
+
+.symtab{width:100%; border-collapse:collapse; font-size:.94rem; margin:.6em 0 1em}
+.tablewrap{overflow-x:auto; max-width:100%}
+.symtab th, .symtab td{border-bottom:1px solid var(--line); text-align:left; padding:7px 10px; vertical-align:top}
+.symtab th{font-size:.75rem; text-transform:uppercase; letter-spacing:.07em; color:var(--fg2)}
+.symtab td:first-child{font-family:var(--font-math); font-size:1.08em; white-space:nowrap}
+.symtab.plain td:first-child{font-family:var(--font-body); font-size:1em; white-space:normal}
+
+ol.steps{counter-reset:s; list-style:none; padding-left:0; max-width:76ch}
+ol.steps > li{counter-increment:s; position:relative; padding:6px 0 6px 40px; border-bottom:1px dashed var(--line)}
+ol.steps > li::before{content:counter(s); position:absolute; left:0; top:6px; width:26px; height:26px; border-radius:50%; background:var(--accent-soft); color:var(--accent); font-weight:700; font-size:.82rem; display:grid; place-items:center}
+
+.figrow{display:flex; flex-wrap:wrap; gap:16px; margin:1em 0; align-items:flex-start}
+figure.kd{margin:0; background:var(--bg); border:1px solid var(--line); border-radius:10px; padding:8px 10px 6px; max-width:100%; overflow-x:auto}
+figure.kd figcaption{font-size:.8rem; color:var(--fg2); text-align:center; margin-top:2px}
+.kd svg{display:block; max-width:100%; height:auto}
+.kd svg text{font-family:var(--font-math); fill:var(--fg)}
+.kd svg .nm{fill:var(--fg2); font-size:12px; font-family:var(--font-body)}
+.kd svg .tt{fill:var(--t); font-size:13px}
+.kd svg .ff{fill:var(--f); font-size:13px}
+.kd svg .edge{stroke:var(--fg2); stroke-width:1.6; fill:none}
+.kd svg .edge.dash{stroke-dasharray:5 4}
+.kd svg .arrowhead{fill:var(--fg2)}
+.kd svg .pt-r{fill:var(--surface); stroke:var(--fg); stroke-width:2}
+.kd svg .pt-i{fill:var(--fg); stroke:var(--fg); stroke-width:2}
+.kd svg .clu{fill:none; stroke:var(--accent); stroke-width:1.6; stroke-dasharray:4 3}
+
+details.q{border:1px solid var(--line); border-radius:10px; padding:10px 14px; margin:.6em 0; background:var(--bg); max-width:76ch}
+details.q summary{cursor:pointer; font-weight:600}
+details.q summary::marker{color:var(--accent)}
+details.q[open] summary{margin-bottom:.4em}
+.selfcheck h3{border-top:none}
+
+.grid2{display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr)); gap:14px}
+.card{background:var(--bg); border:1px solid var(--line); border-radius:10px; padding:12px 16px; min-width:0}
+.card h4{margin-top:0}
+.pill{display:inline-block; font-size:.75rem; padding:1px 8px; border-radius:999px; background:var(--accent-soft); color:var(--accent); font-weight:600}
+.map{width:100%; border-collapse:collapse; font-size:.93rem}
+.map td, .map th{border-bottom:1px solid var(--line); padding:7px 10px; text-align:left; vertical-align:top}
+.map th{font-size:.75rem; text-transform:uppercase; letter-spacing:.07em; color:var(--fg2)}
+code{font-family:var(--font-math)}
+hr.soft{border:none; border-top:1px solid var(--line); margin:1.6em 0}
+</style>
+
+<header class="topbar">
+  <span class="brand">ALCS Exam Revision<small>IT543 · lectures 1 to 24</small></span>
+  <span class="spacer"></span>
+  <button class="themebtn" id="themebtn" type="button">Dark mode</button>
+</header>
+
+<div class="wrap">
+<nav class="toc" aria-label="Chapters">
+  <details open id="tocdet">
+    <summary>Chapters</summary>
+    <ol>
+      <li><a href="#start"><span class="lec">0</span>Start here</a></li>
+      <li><a href="#basics"><span class="lec">L1-14</span>Basics you need</a></li>
+      <li class="sub"><a href="#b-cl">Classical logic and tableaux</a></li>
+      <li class="sub"><a href="#b-hilbert">Hilbert calculus and ⊢</a></li>
+      <li class="sub"><a href="#b-int">Intuitionistic Kripke models</a></li>
+      <li class="sub"><a href="#b-ops">Generated subframes, reductions</a></li>
+      <li class="sub"><a href="#b-trees">Trees and disjoint unions</a></li>
+      <li class="sub"><a href="#b-hint">Int tableaux, Hintikka systems</a></li>
+      <li class="sub"><a href="#b-corr">Int frame conditions</a></li>
+      <li><a href="#l16"><span class="lec">L16</span>Modal language and models</a></li>
+      <li><a href="#l17"><span class="lec">L17</span>Reading modal formulas</a></li>
+      <li><a href="#l18"><span class="lec">L18</span>Clusters and skeletons</a></li>
+      <li><a href="#l19"><span class="lec">L19</span>Generation, reduction, trees</a></li>
+      <li><a href="#l20"><span class="lec">L20</span>Modal tableaux, fmp</a></li>
+      <li><a href="#l21"><span class="lec">L21</span>Correspondence theory</a></li>
+      <li><a href="#l22"><span class="lec">L22</span>Calculus K and its logics</a></li>
+      <li><a href="#l23"><span class="lec">L23</span>Classes of logics</a></li>
+      <li><a href="#l24"><span class="lec">L24</span>Canonical models</a></li>
+      <li><a href="#cheat"><span class="lec">★</span>Cheat sheet</a></li>
+    </ol>
+  </details>
+</nav>
+<main>
+<section class="chapter" id="start">
+  <div class="eyebrow">Chapter 0</div>
+  <h1>Start here</h1>
+  <p class="lead">This page covers everything from lecture 16 to lecture 24, plus a compact "basics you need" chapter built from lectures 1 to 14. There is no lecture 15 in your folder. Theorems are stated without proofs, sometimes with a one-line "why". Every worked example from the slides is solved step by step, so you can copy the method in the exam.</p>
+
+  <h3>How each chapter is laid out</h3>
+  <div class="grid2">
+    <div class="box idea"><span class="tag">Picture it</span><p>An analogy or a picture to hang the idea on.</p></div>
+    <div class="box trap"><span class="tag">Common confusion</span><p>Something students regularly mix up. Read these twice.</p></div>
+    <div class="box exam"><span class="tag">Exam method</span><p>A recipe you can follow line by line for a question type.</p></div>
+    <div class="box stmt"><span class="tag">Statement</span><p>A definition, lemma or theorem, stated exactly.</p></div>
+  </div>
+  <p>Every chapter opens with a table of the symbols it uses, and ends with a few click-to-reveal self-check questions.</p>
+
+  <h3>Reading the diagrams</h3>
+  <div class="figrow">
+    <figure class="kd" data-d="legend"><figcaption>Legend used in every diagram</figcaption></figure>
+  </div>
+  <ul>
+    <li>A <b>hollow circle</b> ∘ is a <b>reflexive</b> point (it sees itself). A <b>filled dot</b> • is an <b>irreflexive</b> point (it does not see itself).</li>
+    <li>An arrow from x to y means <m>xRy</m> ("x sees y"). In Int frames every point is reflexive, so all points are hollow.</li>
+    <li>Formulas written in <span class="tv">green on the left</span> of a point are <b>true</b> there. Formulas in <span class="fv">red on the right</span> are <b>false</b> there. This is the lecture's own convention: true on the left, false on the right.</li>
+    <li>A dashed oval groups points into a <b>cluster</b> (lecture 18).</li>
+  </ul>
+
+  <h3>What the past paper asks (2nd insem)</h3>
+  <div class="tablewrap"><table class="map">
+    <tr><th>Question type</th><th>Where to revise it</th></tr>
+    <tr><td>"Find all reducible frames of 𝔉" (Int frame)</td><td><a href="#b-ops">Reductions</a> and the exam method there</td></tr>
+    <tr><td>"Determine whether φ ∈ Int using semantic tableau"</td><td><a href="#b-hint">Int tableaux</a></td></tr>
+    <tr><td>"Construct a quotient frame, identify the clusters"</td><td><a href="#l18">Lecture 18</a></td></tr>
+    <tr><td>"𝔉 validates sym = p → □◇p iff 𝔉 is symmetric"</td><td><a href="#l21">Lecture 21</a> (fully worked)</td></tr>
+  </table></div>
+  <p>We will go through the actual paper together after this revision, so the page teaches the method on the slide examples instead of solving those exact questions.</p>
+</section>
+
+<section class="chapter" id="basics">
+  <div class="eyebrow">Lectures 1 to 14 · compressed</div>
+  <h2>Basics you need</h2>
+  <p class="lead">Lectures 16 to 24 lean on these ideas all the time. Read this once; later chapters link back here whenever they reuse something.</p>
+
+  <h4>Symbols in this chapter</h4>
+  <div class="tablewrap"><table class="symtab">
+    <tr><th>Symbol</th><th>Read as</th><th>Meaning</th></tr>
+    <tr><td>p, q, r, p₀, p₁</td><td>variables</td><td>Atomic statements that can be true or false.</td></tr>
+    <tr><td>φ, ψ, χ</td><td>phi, psi, chi</td><td>Any formulas (placeholders).</td></tr>
+    <tr><td>Γ, Δ, Σ</td><td>Gamma, Delta, Sigma</td><td>Sets of formulas.</td></tr>
+    <tr><td>⊥</td><td>bottom, falsum</td><td>The formula that is always false.</td></tr>
+    <tr><td>⊤</td><td>top</td><td>Always true. Defined as ⊥ → ⊥.</td></tr>
+    <tr><td>¬φ</td><td>not φ</td><td>Defined as φ → ⊥.</td></tr>
+    <tr><td>φ ↔ ψ</td><td>iff</td><td>Defined as (φ → ψ) ∧ (ψ → φ).</td></tr>
+    <tr><td>Var φ, Sub φ</td><td></td><td>The variables of φ; the set of subformulas of φ (including φ).</td></tr>
+    <tr><td>For ℒ</td><td></td><td>The set of all formulas of the language ℒ.</td></tr>
+    <tr><td>𝔐 ⊨ φ</td><td>𝔐 satisfies φ</td><td>φ is true in the model 𝔐. ⊭ means "not true".</td></tr>
+    <tr><td>⊢ φ</td><td>φ is derivable</td><td>φ can be proved with axioms and rules (syntax, not truth).</td></tr>
+    <tr><td>Γ ⊢ φ</td><td></td><td>φ can be derived when the formulas of Γ are allowed as assumptions.</td></tr>
+    <tr><td>Cl, Int</td><td></td><td>Classical logic, intuitionistic logic (as sets of formulas).</td></tr>
+    <tr><td>𝔉 = ⟨W, R⟩</td><td>frame</td><td>W is a non-empty set of points (worlds). R ⊆ W × W says who sees whom.</td></tr>
+    <tr><td>xRy</td><td>x sees y</td><td>y is accessible from x.</td></tr>
+    <tr><td>V(p)</td><td>valuation</td><td>The set of points where p is true.</td></tr>
+    <tr><td>x↑, x↓</td><td>up-set, down-set</td><td>Points x sees; points that see x.</td></tr>
+  </table></div>
+
+  <h3 id="b-cl">1. Classical logic and semantic tableaux (L1, L2)</h3>
+  <p>A <b>classical model</b> is just the set of variables that are true. A formula is <b>valid</b> (<m>⊨ φ</m>) if it is true in every model. <b>Cl</b> is the set of all valid formulas (tautologies). Truth tables decide this, but they need 2ⁿ rows.</p>
+  <p>The <b>semantic tableau</b> is a smarter search for a countermodel. A tableau is a pair <m>t = (Γ, Δ)</m>: Γ is what we want <span class="tv">true</span>, Δ is what we want <span class="fv">false</span>. Start with <m>(∅, {φ})</m> and break formulas apart:</p>
+  <div class="tablewrap"><table class="symtab">
+    <tr><th>Rule</th><th>If this is in…</th><th>…then add</th></tr>
+    <tr><td>S1</td><td>ψ ∧ χ ∈ Γ (and is true)</td><td>ψ and χ to Γ</td></tr>
+    <tr><td>S2</td><td>ψ ∧ χ ∈ Δ (and is false)</td><td>ψ to Δ <b>or</b> χ to Δ (branch)</td></tr>
+    <tr><td>S3</td><td>ψ ∨ χ ∈ Γ</td><td>ψ to Γ <b>or</b> χ to Γ (branch)</td></tr>
+    <tr><td>S4</td><td>ψ ∨ χ ∈ Δ</td><td>ψ and χ to Δ</td></tr>
+    <tr><td>S5</td><td>ψ → χ ∈ Γ</td><td>ψ to Δ <b>or</b> χ to Γ (branch)</td></tr>
+    <tr><td>S6</td><td>ψ → χ ∈ Δ</td><td>ψ to Γ and χ to Δ</td></tr>
+  </table></div>
+  <p>A branch is <b>closed</b> when some formula sits on both sides, or ⊥ sits on the left. The tableau is <b>disjoint</b> if <m>Γ ∩ Δ = ∅</m> and <m>⊥ ∉ Γ</m>. <b>Saturated</b> means every rule has been applied. If every branch closes, φ is valid. If a branch stays open and saturated, its variables on the left give a countermodel.</p>
+  <div class="box exam"><span class="tag">Exam method · classical tableau</span>
+    <p>Example from L2: is Peirce's law <m>((p → q) → p) → p</m> valid?</p>
+    <ol class="steps">
+      <li>Put it on the right: Δ = {((p→q)→p)→p}.</li>
+      <li>S6 on that implication: Γ gets (p→q)→p, Δ gets p.</li>
+      <li>S5 on (p→q)→p ∈ Γ branches. Left branch: p→q to Δ, then S6 gives p to Γ and q to Δ. Now p is in Γ and in Δ: closed.</li>
+      <li>Right branch: p to Γ. p is already in Δ: closed.</li>
+      <li>All branches closed, so no countermodel exists: Peirce's law ∈ Cl.</li>
+    </ol>
+  </div>
+
+  <h3 id="b-hilbert">2. Hilbert calculus, derivations and ⊢ (L3 to L6)</h3>
+  <p>A Hilbert calculus proves formulas from axioms with rules. The classical calculus CL has axioms A1 to A10 and two rules.</p>
+  <div class="tablewrap"><table class="symtab">
+    <tr><th>Axiom</th><th>Formula</th><th>Plain meaning</th></tr>
+    <tr><td>A1</td><td><m>p₀ → (p₁ → p₀)</m></td><td>A true thing follows from anything.</td></tr>
+    <tr><td>A2</td><td><m>(p₀→(p₁→p₂)) → ((p₀→p₁) → (p₀→p₂))</m></td><td>Distribute an assumption.</td></tr>
+    <tr><td>A3, A4</td><td><m>p₀ ∧ p₁ → p₀</m>, <m>p₀ ∧ p₁ → p₁</m></td><td>Take a conjunct out.</td></tr>
+    <tr><td>A5</td><td><m>p₀ → (p₁ → p₀ ∧ p₁)</m></td><td>Build a conjunction.</td></tr>
+    <tr><td>A6, A7</td><td><m>p₀ → p₀ ∨ p₁</m>, <m>p₁ → p₀ ∨ p₁</m></td><td>Build a disjunction.</td></tr>
+    <tr><td>A8</td><td><m>(p₀→p₂) → ((p₁→p₂) → (p₀∨p₁ → p₂))</m></td><td>Proof by cases.</td></tr>
+    <tr><td>A9</td><td><m>⊥ → p₀</m></td><td>From false, anything.</td></tr>
+    <tr><td>A10</td><td><m>p₀ ∨ (p₀ → ⊥)</m></td><td>Excluded middle. <b>Int drops this one.</b></td></tr>
+  </table></div>
+  <p><b>Rules:</b> <b>MP</b> (modus ponens): from φ and φ → ψ get ψ. <b>Subst</b>: from φ get any substitution instance (replace variables uniformly by formulas, e.g. p₀ := q ∧ r everywhere).</p>
+  <p><b>Γ ⊢ φ</b> means φ is derivable when the formulas in Γ may be used as extra assumptions. Subst is applied only to axioms, never to assumptions (otherwise from p you could "derive" q).</p>
+  <div class="box stmt"><span class="tag">Deduction theorem (L4)</span><p><m>Γ, ψ ⊢ φ</m> implies <m>Γ ⊢ ψ → φ</m>. You may move an assumption to the left of an arrow ("discharge" it).</p></div>
+  <div class="box stmt"><span class="tag">Soundness and completeness of CL (L5)</span><p><m>⊢ φ</m> iff <m>⊨ φ</m>. So Cl = {φ : ⊢ φ}: "provable" and "valid" give the same set.</p></div>
+  <p>From L6: a <b>logic</b> is any set of formulas closed under MP and Subst. A logic is <b>consistent</b> if it is not the set of all formulas (with A9 present, this is the same as ⊥ not being in it). L₂ is an <b>extension</b> of L₁ if L₁ ⊆ L₂. Cl is consistent, decidable, and <b>Post complete</b> (no consistent proper extension).</p>
+  <div class="box trap"><span class="tag">Common confusion · ⊨ versus ⊢</span><p>⊨ is about <b>truth</b> (models, worlds, valuations). ⊢ is about <b>proofs</b> (axioms and rules). Completeness theorems are exactly the bridges saying the two agree.</p></div>
+
+  <h3 id="b-int">3. Intuitionistic Kripke models (L7, L8)</h3>
+  <div class="box idea"><span class="tag">Picture it</span><p>Think of points as <b>stages of knowledge</b> over time, and R as "later stage". Once you have proved something you never lose it. A statement is "false now" only in the weak sense "not yet established".</p></div>
+  <p>An <b>intuitionistic frame</b> is <m>𝔉 = ⟨W, R⟩</m> where R is a <b>partial order</b>: reflexive (xRx), transitive (xRy, yRz ⇒ xRz) and antisymmetric (xRy, yRx ⇒ x = y). A <b>valuation</b> V must be <b>upward closed</b>: if <m>x ∈ V(p)</m> and xRy then <m>y ∈ V(p)</m>. The set of upward closed subsets is written <b>Up W</b>. A <b>model</b> is <m>𝔐 = ⟨𝔉, V⟩</m>.</p>
+  <div class="tablewrap"><table class="symtab">
+    <tr><th>Formula</th><th>True at x iff</th></tr>
+    <tr><td>p</td><td>x ∈ V(p)</td></tr>
+    <tr><td>⊥</td><td>never</td></tr>
+    <tr><td>ψ ∧ χ / ψ ∨ χ</td><td>both true at x / at least one true at x</td></tr>
+    <tr><td>ψ → χ</td><td>for <b>every</b> y with xRy: if ψ true at y then χ true at y</td></tr>
+    <tr><td>¬ψ</td><td>ψ is true at <b>no</b> y with xRy</td></tr>
+  </table></div>
+  <div class="box stmt"><span class="tag">Persistence (L7)</span><p>If x ⊨ φ and xRy then y ⊨ φ. Truth only spreads upward; falsity only spreads downward.</p></div>
+  <p><b>Truth in a model</b> (𝔐 ⊨ φ): true at every point. <b>Valid in a frame</b> (𝔉 ⊨ φ): true at every point under <b>every</b> valuation. <b>Int</b> = the formulas valid in all intuitionistic frames. One-point frames behave classically, so <m>Int ⊆ Cl</m>.</p>
+  <div class="box exam"><span class="tag">Worked example (L8) · p ∨ ¬p and ¬¬p → p fail</span>
+    <div class="figrow"><figure class="kd" data-d="int2"><figcaption>W = {a, b}, aRb, V(p) = {b}</figcaption></figure></div>
+    <ol class="steps">
+      <li>At b: p is true, so p ∨ ¬p is true.</li>
+      <li>At a: p is false (a ∉ V(p)). ¬p is also false, because a sees b and p is true at b. So p ∨ ¬p is false at a.</li>
+      <li>¬p is false at a and at b. So no point above a makes ¬p true, which means ¬¬p is true at a.</li>
+      <li>At a itself (aRa): ¬¬p true, p false. So ¬¬p → p fails at a.</li>
+    </ol>
+    <p>The other direction <m>p → ¬¬p</m> is valid on every frame (by persistence).</p>
+  </div>
+  <div class="box trap"><span class="tag">Common confusion · → in Int</span><p>In classical logic and in modal logic (from L16 on), → only looks at the <b>current</b> point. In Int, → and ¬ look at <b>all later points</b>. This one difference is why p ∨ ¬p fails in Int.</p></div>
+
+  <h3 id="b-ops">4. Generated subframes and reductions (L8 to L10)</h3>
+  <p><b>Subframe</b>: pick a subset V ⊆ W and keep exactly the arrows between points of V. <b>Generated subframe</b> (<m>𝔊 ⊑ 𝔉</m>): a subframe whose V is <b>upward closed</b> (if x is in, everything x sees is in). The subframe <b>generated by</b> X is X↑, everything seen from X. A frame is <b>rooted</b> with root x if it is generated by {x}.</p>
+  <div class="box stmt"><span class="tag">Generation theorem (L9)</span><p>If 𝔑 is a generated submodel of 𝔐, then for every x in 𝔑: <m>𝔑, x ⊨ φ</m> iff <m>𝔐, x ⊨ φ</m>. So <m>𝔉 ⊨ φ ⇒ 𝔊 ⊨ φ</m> for generated subframes, and Int = validity on all <b>rooted</b> frames.</p>
+  <p class="proofidea">Why: → and ¬ only look upward, and a generated subframe keeps everything above its points.</p></div>
+  <div class="box idea"><span class="tag">Picture it</span><p>A generated subframe is "x and its whole future". Throwing away points nobody above you can reach changes nothing for you.</p></div>
+
+  <p>A <b>reduction</b> (also called p-morphism) of <m>𝔉 = ⟨W, R⟩</m> onto <m>𝔊 = ⟨V, S⟩</m> is a map f : W → V that is <b>onto</b> and satisfies:</p>
+  <div class="fm">(R1) forth: xRy ⇒ f(x) S f(y)<br>(R2) back: f(x) S v ⇒ there is z with xRz and f(z) = v</div>
+  <p>𝔊 is then an <b>f-reduct</b> of 𝔉, and 𝔉 is <b>reducible</b> to 𝔊.</p>
+  <div class="box idea"><span class="tag">Picture it</span><p>A reduction <b>glues points together</b> without changing what anyone can "see". R1: you can't lose a view. R2: you can't gain a view you didn't already have in the original.</p></div>
+  <div class="box stmt"><span class="tag">Reduction theorem (L10)</span><p>If f reduces model 𝔐 to model 𝔑 (with <m>V(p) = f⁻¹(u(p))</m>), then <m>𝔐, x ⊨ φ</m> iff <m>𝔑, f(x) ⊨ φ</m>. Consequence: <m>𝔉 ⊨ φ ⇒ 𝔊 ⊨ φ</m> for every reduct 𝔊. A one-to-one reduction is an isomorphism, and composing two reductions gives a reduction.</p></div>
+
+  <div class="box exam"><span class="tag">Exam method · finding reducts of a finite Int frame</span>
+    <ol class="steps">
+      <li>Write the up-set x↑ of every point. Make R reflexive and transitive first if the question lists it without the closure (say so in your answer).</li>
+      <li>Rule for gluing: in a partial order, a reduction must satisfy <m>f(x↑) = f(x)↑</m>. So two points x, y can be glued only if their up-sets land on the same set of glued classes.</li>
+      <li>Consequences you use all the time: final points (seeing only themselves) must go to final points. A point and a point strictly above it can be glued only if everything the lower one sees is glued into that same class or is also seen from the upper one.</li>
+      <li>Try candidate gluings from the top down (final points first), check R1 and R2 for each, and draw each resulting frame.</li>
+      <li>Always list the trivial ones: the frame itself (f = identity) and the one-point frame (everything glued; works for every rooted frame).</li>
+    </ol>
+  </div>
+  <div class="box exam"><span class="tag">Worked example (L10)</span>
+    <div class="figrow">
+      <figure class="kd" data-d="redA"><figcaption>(a) two branches of length 2</figcaption></figure>
+      <figure class="kd" data-d="redB"><figcaption>(b) diamond</figcaption></figure>
+      <figure class="kd" data-d="redG"><figcaption>(g) "Y" shape</figcaption></figure>
+    </div>
+    <p>The slide says (a) reduces to (b), (c) 3-chain, (d) fork, (e) 2-chain, (f) one point, but <b>not</b> to (g).</p>
+    <ol class="steps">
+      <li>To the diamond (b): send r to the bottom, a₁ and b₁ to the two middle points, and glue a₂, b₂ together onto the top. Every view of a point in (b) is the image of a view in (a). R1 and R2 both hold.</li>
+      <li>To the 3-chain (c): glue a₁ with b₁, and a₂ with b₂. To the fork (d): glue a₁ with a₂, and b₁ with b₂. To the 2-chain (e): r to the bottom, everything else to the top. To (f): everything to one point.</li>
+      <li>Why not (g): r must go to g's bottom (it sees everything, and f is onto). Some point must go to the middle m. By R2 it then needs two successors mapped to the two incomparable tops. In (a) only r has two incomparable successors, and r is already used. a₁ and b₁ each see only a chain. So no reduction exists.</li>
+    </ol>
+  </div>
+
+  <h3 id="b-trees">5. Trees, unravelling, disjoint unions (L11, L12)</h3>
+  <p>A <b>tree</b> is a rooted frame where every x↓ is finite and linearly ordered (no point is reached from two incomparable points). <b>Unravelling theorem</b>: every rooted frame is a reduct of a tree (points of the tree are paths from the root, f sends a path to its last point). <m>𝔗ₙ</m> is the <b>full n-ary tree</b> (every point has exactly n immediate successors, no end). Every finite rooted frame is a reduct of 𝔗ₙ for n ≥ 2, so <m>Int = {φ : 𝔗ₙ ⊨ φ}</m>.</p>
+  <p>A <b>disjoint union</b> puts frames side by side with no arrows between them. Each piece is a generated subframe, so the union validates φ iff every piece does.</p>
+  <div class="box idea"><span class="tag">Picture it · the three "truth preserving operations"</span><p>Generated subframes (cut off the past), reductions (glue look-alike points), disjoint unions (put frames side by side). None of them can break the validity of a formula. These come back in lecture 18 and 19 for modal logic.</p></div>
+
+  <h3 id="b-hint">6. Int tableaux and Hintikka systems (L13)</h3>
+  <p>To test <m>φ ∈ Int</m>, try to build a countermodel. Each point carries a tableau (Γ | Δ). In Int the rules S1 to S5 apply inside a point, but <b>S6 is dropped</b>: a false implication needs a <b>new later point</b>.</p>
+  <div class="fm">(HS_I1) if t S t′ then Γ ⊆ Γ′   (true things stay true later)<br>(HS_I2) if ψ → χ ∈ Δ then some t′ with t S t′ has ψ ∈ Γ′ and χ ∈ Δ′</div>
+  <p>A <b>Hintikka system</b> is a set of disjoint saturated tableaux with a partial order S satisfying HS_I1 and HS_I2. A tableau is <b>realizable</b> if some point of some model makes Γ true and Δ false. <b>t is realizable iff there is a Hintikka system for it</b>, and you never need more than <m>2<sup>|Σ|</sup></m> tableaux (Σ = subformulas). So Int has the <b>finite model property</b>: every non-theorem fails in a finite frame.</p>
+  <div class="box exam"><span class="tag">Exam method · "is φ ∈ Int?" by tableau</span>
+    <ol class="steps">
+      <li>Start at t₀ with φ on the right.</li>
+      <li>Apply S1 to S5 inside the point. A true implication on the left (S5) branches: premise false or conclusion true.</li>
+      <li>For every implication or negation on the <b>right</b>, open a new point above with the premise on the left and the conclusion on the right. Copy <b>everything on the left</b> of the lower point to the new point (HS_I1).</li>
+      <li>If every attempt closes (a formula on both sides, or ⊥ on the left), φ ∈ Int. If you finish with no clash, read off the frame: points = tableaux, R = the arrows plus reflexive and transitive closure, V(p) = points with p on the left. Check V is upward closed.</li>
+      <li>Verify the countermodel in two lines at the end. Examiners like seeing the check.</li>
+    </ol>
+  </div>
+  <div class="box exam"><span class="tag">Worked example (L13) · Dummett's formula (p → q) ∨ (q → p)</span>
+    <div class="figrow"><figure class="kd" data-d="dummett"><figcaption>Countermodel: V(p) = {t₁}, V(q) = {t₂}</figcaption></figure></div>
+    <ol class="steps">
+      <li>t₀: right side gets (p→q) ∨ (q→p). By S4 both disjuncts go right: p→q and q→p.</li>
+      <li>p→q on the right: new point t₁ above t₀ with p | q.</li>
+      <li>q→p on the right: new point t₂ above t₀ with q | p.</li>
+      <li>No clash anywhere. Frame: t₀ below t₁ and t₂, which are incomparable. V(p) = {t₁}, V(q) = {t₂}.</li>
+      <li>Check: t₁ ⊨ p, t₁ ⊭ q, so t₀ ⊭ p → q. t₂ ⊨ q, t₂ ⊭ p, so t₀ ⊭ q → p. So t₀ ⊭ (p→q) ∨ (q→p): not in Int.</li>
+    </ol>
+    <p>A second slide example, <m>p₂ ∨ (p₂ → p₁ ∨ ¬p₁)</m>, needs a 3-point chain t₀ R t₁ R t₂ with V(p₂) = {t₁, t₂}, V(p₁) = {t₂}.</p>
+  </div>
+  <div class="box trap"><span class="tag">Common confusion · when to open a new point</span><p>Only for an implication (or negation) on the <b>right</b>. Disjunctions and conjunctions are handled inside the same point. And remember to copy the left side upward: forgetting HS_I1 is the most common way to get a "countermodel" that is wrong.</p></div>
+
+  <h3 id="b-corr">7. Int formulas and frame conditions (L14)</h3>
+  <p>Some formulas are valid exactly on frames with a certain shape. This is the Int version of what lecture 21 does for modal logic.</p>
+  <div class="tablewrap"><table class="symtab">
+    <tr><th>Formula</th><th>Valid exactly on frames that are…</th></tr>
+    <tr><td>dₐ = (p→q) ∨ (q→p)</td><td><b>strongly connected</b>: xRy ∧ xRz ⇒ yRz ∨ zRy (any two points above x are comparable)</td></tr>
+    <tr><td>wem = ¬p ∨ ¬¬p</td><td><b>strongly directed</b> (convergent): xRy ∧ xRz ⇒ some u with yRu and zRu</td></tr>
+    <tr><td>bdₙ (bd₁ = p₁ ∨ ¬p₁, bdₙ₊₁ = pₙ₊₁ ∨ (pₙ₊₁ → bdₙ))</td><td>of <b>depth ≤ n</b>: no chain of n+1 distinct points</td></tr>
+    <tr><td>bwₙ</td><td>of <b>width ≤ n</b> in every rooted subframe: among any n+1 successors of a point, two are comparable</td></tr>
+  </table></div>
+  <p>The valuation trick from the slides: to refute dₐ when y and z are incomparable above x, take V(p) = y↑ and V(q) = z↑.</p>
+
+  <div class="selfcheck">
+    <h3>Self-check</h3>
+    <details class="q"><summary>Why must an Int valuation be upward closed?</summary><p>Because a point is a stage of knowledge. Something established at x stays established at every later stage. This is what gives persistence for all formulas.</p></details>
+    <details class="q"><summary>Which classical axiom is missing from Int?</summary><p>A10, excluded middle p₀ ∨ (p₀ → ⊥). Int is A1 to A9 with MP and Subst.</p></details>
+    <details class="q"><summary>A map f is onto and satisfies R1 but not R2. Is it a reduction? What can go wrong?</summary><p>No. Without R2 the image can contain views that the original point did not have, so a formula like ¬p could be true at x but false at f(x).</p></details>
+    <details class="q"><summary>In an Int tableau, which formulas force you to create a new point?</summary><p>Implications and negations on the right side (false ones). Everything else is decomposed inside the same point.</p></details>
+  </div>
+</section>
+<section class="chapter" id="l16">
+  <div class="eyebrow">Lecture 16</div>
+  <h2>The modal language, frames and models</h2>
+  <p class="lead">Modal logic adds two words to classical logic: "necessarily" (□) and "possibly" (◇). The semantics reuses Kripke frames, but now R can be <b>any</b> relation.</p>
+
+  <h4>Symbols in this chapter</h4>
+  <div class="tablewrap"><table class="symtab">
+    <tr><th>Symbol</th><th>Read as</th><th>Meaning</th></tr>
+    <tr><td>□φ</td><td>box φ, necessarily φ</td><td>φ is true at <b>every</b> point I can see.</td></tr>
+    <tr><td>◇φ</td><td>diamond φ, possibly φ</td><td>φ is true at <b>some</b> point I can see. Defined as ¬□¬φ.</td></tr>
+    <tr><td>ML, For ML, Var ML</td><td></td><td>The modal language; its set of formulas; its set of variables.</td></tr>
+    <tr><td>𝔉 = ⟨W, R⟩</td><td>modal frame</td><td>W non-empty, R ⊆ W × W <b>arbitrary</b>.</td></tr>
+    <tr><td>V : Var ML → 2<sup>W</sup></td><td>valuation</td><td>2<sup>W</sup> is the set of all subsets of W. V(p) is where p is true. No upward-closure condition.</td></tr>
+    <tr><td>𝔐 = ⟨𝔉, V⟩</td><td>Kripke model</td><td>A frame plus a valuation.</td></tr>
+    <tr><td>(𝔐, x) ⊨ φ, or x ⊨ φ</td><td></td><td>φ is true at world x of 𝔐.</td></tr>
+    <tr><td>V(φ)</td><td>truth set</td><td>{x : x ⊨ φ}.</td></tr>
+    <tr><td>md(φ)</td><td>modal degree</td><td>The deepest nesting of □/◇ in φ.</td></tr>
+    <tr><td>□ⁿφ, ◇ⁿφ</td><td></td><td>n boxes / n diamonds in a row. □⁰φ = ◇⁰φ = φ.</td></tr>
+    <tr><td>xRⁿy, y ∈ x↑ⁿ</td><td>n steps</td><td>There is a path x R z₁ R … R zₙ₋₁ R y of exactly n arrows. xR⁰y means x = y.</td></tr>
+  </table></div>
+
+  <h3>The language</h3>
+  <p>Take the propositional language and add one new rule: if φ is a formula, so is <m>□φ</m>. Then <m>◇φ := ¬□¬φ</m>. Box and diamond bind more tightly than ∧, ∨, →, so <m>□p → □q ∨ □r</m> means <m>(□p) → ((□q) ∨ (□r))</m>.</p>
+  <div class="box idea"><span class="tag">Picture it</span><p>Each point is a city and R is the flight map. <m>□φ</m> at x: "every city I can fly to directly has φ". <m>◇φ</m> at x: "at least one city I can fly to directly has φ". You don't look at your own city unless there is a loop flight (xRx).</p></div>
+
+  <h3>Frames, valuations, truth</h3>
+  <div class="tablewrap"><table class="symtab">
+    <tr><th>Formula</th><th>True at x iff</th></tr>
+    <tr><td>p</td><td>x ∈ V(p)</td></tr>
+    <tr><td>⊥</td><td>never</td></tr>
+    <tr><td>ψ ∧ χ, ψ ∨ χ</td><td>as usual, at x</td></tr>
+    <tr><td>ψ → χ</td><td>ψ true at x implies χ true at x (<b>only at x</b>, classical)</td></tr>
+    <tr><td>¬ψ</td><td>ψ is false at x</td></tr>
+    <tr><td>□ψ</td><td>ψ true at <b>all</b> y with xRy</td></tr>
+    <tr><td>◇ψ</td><td>ψ true at <b>some</b> y with xRy</td></tr>
+  </table></div>
+  <div class="box trap"><span class="tag">Common confusion · Int versus modal</span>
+    <p>Three differences to keep straight:</p>
+    <ul>
+      <li>Int: R is a partial order. Modal: R is <b>anything</b> (no loops needed, no transitivity).</li>
+      <li>Int: V(p) must be upward closed. Modal: V(p) is <b>any</b> set.</li>
+      <li>Int: → and ¬ look at later points. Modal: → and ¬ are <b>classical</b> (only the current point). Only □ and ◇ look elsewhere.</li>
+    </ul>
+  </div>
+  <p>Satisfied, true in a model, refuted, valid in a frame and isomorphism all mean exactly what they meant for Int. In particular <b>𝔉 ⊨ φ</b> (valid in the frame) means true at every point under every valuation.</p>
+
+  <h3>Modal degree</h3>
+  <p><m>md(p) = 0</m>, <m>md(ψ ⊙ χ) = max(md ψ, md χ)</m> for ⊙ ∈ {∧, ∨, →}, and <m>md(□ψ) = md(◇ψ) = md(ψ) + 1</m>.</p>
+  <p>Examples: <m>md(p ∧ q) = 0</m>, <m>md(□p → □□q) = 2</m>, <m>md(□(□p → p) → □p) = 2</m>, <m>md(□p → ◇p) = 1</m>.</p>
+
+  <h3>n-step accessibility and point types</h3>
+  <p><m>x↑ⁿ</m> is the set of points reachable from x in exactly n arrows. So <m>x↑⁰ = {x}</m> and <m>x↑¹ = x↑</m>.</p>
+  <ul>
+    <li>If R is <b>transitive</b>: xRⁿy ⇒ xRy (collapse the path). If R is also <b>reflexive</b>, the converse holds too (pad the path with loops).</li>
+    <li>x is <b>reflexive</b> if xRx (then xRⁿx for every n). A frame is reflexive / irreflexive if all its points are.</li>
+    <li>A frame is <b>intransitive</b> if <m>xRy ∧ yRz ⇒ ¬xRz</m> always. This is stronger than "not transitive": it says <b>no</b> two-step path has a shortcut. An intransitive frame is automatically irreflexive (take x = y = z).</li>
+  </ul>
+
+  <div class="selfcheck">
+    <h3>Self-check</h3>
+    <details class="q"><summary>Is ◇ a new primitive symbol?</summary><p>No. ◇φ is shorthand for ¬□¬φ: "not every successor has ¬φ", i.e. some successor has φ.</p></details>
+    <details class="q"><summary>md(◇(p ∧ □q) ∨ □r) = ?</summary><p>max(1 + max(0, 1), 1) = 2.</p></details>
+    <details class="q"><summary>Can a modal valuation make p true at x and false at a point x sees?</summary><p>Yes. There is no persistence requirement in modal logic.</p></details>
+  </div>
+</section>
+
+<section class="chapter" id="l17">
+  <div class="eyebrow">Lecture 17</div>
+  <h2>Reading modal formulas on concrete models</h2>
+  <p class="lead">This lecture is mostly practice: how to evaluate □, ◇, □ⁿ at a point, what happens at dead ends, and four examples that every later lecture refers back to.</p>
+
+  <h4>Symbols in this chapter</h4>
+  <div class="tablewrap"><table class="symtab">
+    <tr><th>Symbol</th><th>Meaning</th></tr>
+    <tr><td>dead end</td><td>A point with no successors at all (x↑ = ∅).</td></tr>
+    <tr><td>∘, •</td><td>Reflexive point, irreflexive point.</td></tr>
+    <tr><td>La</td><td>Löb's formula □(□p → p) → □p.</td></tr>
+    <tr><td>induced subframe / submodel</td><td>Keep a set X of points, all arrows between them, and V(p) ∩ X. X need not be upward closed.</td></tr>
+  </table></div>
+
+  <h3>Boxes and diamonds n levels deep</h3>
+  <div class="box stmt"><span class="tag">Proposition</span><p><m>x ⊨ □ⁿψ</m> iff ψ is true at every point of <m>x↑ⁿ</m>. <m>x ⊨ ◇ⁿψ</m> iff ψ is true at some point of <m>x↑ⁿ</m>.</p></div>
+  <p>If <m>x↑ⁿ = ∅</m> (no path of length n), then <m>□ⁿφ</m> is true (nothing to check) and <m>◇ⁿφ</m> is false (no witness), for every φ.</p>
+  <div class="box trap"><span class="tag">Common confusion · dead ends</span><p>At a <b>dead end</b>, <m>□φ</m> is <b>true for every φ</b>, even <m>□⊥</m>, and <m>◇φ</m> is <b>false for every φ</b>, even <m>◇⊤</m>. "All of nobody" is vacuously true; "some of nobody" is false. Many countermodels in this course are just a dead end.</p></div>
+
+  <div class="box stmt"><span class="tag">Proposition · only n steps matter</span><p>If <m>md(φ) ≤ n</m>, then whether φ is true at x depends only on the submodel induced by <m>x↑⁰ ∪ x↑¹ ∪ … ∪ x↑ⁿ</m>.</p>
+  <p class="proofidea">Why: each box or diamond moves you one step. A formula with at most n nested modalities never walks more than n steps away.</p></div>
+
+  <h3>Drawing conventions</h3>
+  <ul>
+    <li>Irreflexive points are bullets •, reflexive points are circles ∘.</li>
+    <li>An arrow from x to y is drawn when x ≠ y and xRy.</li>
+    <li><b>Diagrams are assumed transitive</b>: the shortcut x → z is not drawn if x → y → z is drawn. For a non-transitive frame, the lecture says so and draws every arrow.</li>
+    <li>In models, true formulas go on the left of a point and false ones on the right.</li>
+  </ul>
+  <div class="box trap"><span class="tag">Common confusion · implied arrows</span><p>When a frame is "transitive by convention", a point sees everything above it along any path, even without a drawn arrow. When it is stated to be non-transitive, it sees only what is drawn. Always check which case you are in before evaluating □□p.</p></div>
+
+  <h3>The four examples</h3>
+  <div class="box exam"><span class="tag">Exam method · evaluating a formula at a point</span>
+    <ol class="steps">
+      <li>List the successors of the point (and theirs, if the formula has □□ or ◇◇).</li>
+      <li>Evaluate from the inside out: atoms first, then □/◇ of atoms at each relevant point, then the outer connective.</li>
+      <li>For a countermodel to α → β at x, show α true at x and β false at x.</li>
+    </ol>
+  </div>
+
+  <h4>Example 1 · single irreflexive point</h4>
+  <div class="figrow"><figure class="kd" data-d="e17a"><figcaption>W = {a}, R = ∅, V(p) = ∅</figcaption></figure></div>
+  <ol class="steps">
+    <li>a has no successors, so <m>a ⊨ □p</m> (vacuous).</li>
+    <li>p is false at a. So <m>a ⊭ □p → p</m>.</li>
+    <li><m>◇p</m> needs a successor, there is none, so <m>a ⊭ ◇p</m>. With <m>a ⊨ □p</m>: <m>a ⊭ □p → ◇p</m>.</li>
+  </ol>
+  <p>Both the T-axiom □p → p and the D-axiom □p → ◇p fail on a dead end.</p>
+
+  <h4>Example 2 · single reflexive point, and Löb's formula</h4>
+  <div class="figrow"><figure class="kd" data-d="e17b"><figcaption>W = {a}, R = {(a, a)}, V(p) = ∅</figcaption></figure></div>
+  <ol class="steps">
+    <li>a sees itself and p is false at a, so <m>a ⊭ □p</m>. Then <m>□p → p</m> and <m>□p → ◇p</m> are both true at a (false premise).</li>
+    <li>For La = <m>□(□p → p) → □p</m>: the only successor of a is a, and <m>a ⊨ □p → p</m> (step 1). So <m>a ⊨ □(□p → p)</m>.</li>
+    <li>But <m>a ⊭ □p</m>. Premise true, conclusion false: <m>a ⊭ La</m>.</li>
+  </ol>
+
+  <h4>Example 3 · La on an infinite chain</h4>
+  <div class="figrow"><figure class="kd" data-d="e17c"><figcaption>a → b → c → … transitive, all irreflexive, p false everywhere</figcaption></figure></div>
+  <ol class="steps">
+    <li>Every point has a successor where p is false, so <m>□p</m> is false everywhere.</li>
+    <li>So <m>□p → p</m> is true everywhere (false premise), hence <m>□(□p → p)</m> is true everywhere.</li>
+    <li>But <m>□p</m> is false everywhere, so La fails at <b>every</b> point.</li>
+  </ol>
+
+  <h4>Example 4 · transitivity axiom fails on a non-transitive frame</h4>
+  <div class="figrow">
+    <figure class="kd" data-d="e17d"><figcaption>Not transitive: aRb, bRc, no aRc. V(p) = {a, b}</figcaption></figure>
+    <figure class="kd" data-d="e17e"><figcaption>Reflexive variant, still no aRc</figcaption></figure>
+  </div>
+  <ol class="steps">
+    <li>Left frame: a's only successor is b and b ⊨ p, so <m>a ⊨ □p</m>.</li>
+    <li>b's only successor is c and c ⊭ p, so <m>b ⊭ □p</m>. Since aRb, <m>a ⊭ □□p</m>.</li>
+    <li>So <m>a ⊭ □p → □□p</m>.</li>
+    <li>Reflexive variant: a's successors are a and b, both have p, so <m>a ⊨ □p</m>. b's successors are b and c, and c ⊭ p, so <m>b ⊭ □p</m> and <m>a ⊭ □□p</m>. Same conclusion.</li>
+  </ol>
+
+  <h3>Transitive frames: □ goes up, ◇ goes down</h3>
+  <div class="box stmt"><span class="tag">Proposition</span><p>On a transitive frame: (i) <m>x ⊨ □φ</m> and xRy ⇒ <m>y ⊨ □φ</m>. (ii) <m>x ⊨ ◇φ</m> and yRx ⇒ <m>y ⊨ ◇φ</m>.</p>
+  <p class="proofidea">Why: y's successors are also x's successors (transitivity), so whatever holds at all of x's successors holds at all of y's.</p></div>
+  <div class="box idea"><span class="tag">Picture it</span><p>This is the modal cousin of Int persistence, but weaker: it holds only for formulas that start with □ (upward) or ◇ (downward), and only on transitive frames.</p></div>
+
+  <div class="selfcheck">
+    <h3>Self-check</h3>
+    <details class="q"><summary>Is □⊥ true anywhere?</summary><p>Yes: exactly at dead ends. That is a handy way to say "x is a dead end" in the language.</p></details>
+    <details class="q"><summary>Why does Example 4 need the frame to be non-transitive?</summary><p>□p → □□p is valid exactly on transitive frames (lecture 21). The countermodel uses aRb, bRc without aRc.</p></details>
+    <details class="q"><summary>Does La fail on a single reflexive point, a single irreflexive point, or both?</summary><p>Only the reflexive one. On a single irreflexive point □p is true (dead end), so La's conclusion holds.</p></details>
+  </div>
+</section>
+<section class="chapter" id="l18">
+  <div class="eyebrow">Lecture 18</div>
+  <h2>Clusters, skeletons and generated sets</h2>
+  <p class="lead">In a transitive frame some points see each other both ways. Such a group behaves like one "super point" for □ and ◇. Collapsing each group gives the skeleton.</p>
+
+  <h4>Symbols in this chapter</h4>
+  <div class="tablewrap"><table class="symtab">
+    <tr><th>Symbol</th><th>Meaning</th></tr>
+    <tr><td>x ∼ y</td><td>x and y are in the same cluster: x = y, or (xRy and yRx).</td></tr>
+    <tr><td>C(x)</td><td>The cluster containing x: {y : y ∼ x}.</td></tr>
+    <tr><td>W/∼, R/∼</td><td>The set of clusters; the relation between clusters.</td></tr>
+    <tr><td>ρ𝔉 = ⟨ρW, ρR⟩</td><td>ρ (rho) = "skeleton of". Same thing as ⟨W/∼, R/∼⟩.</td></tr>
+    <tr><td>ⓝ</td><td>Drawing shorthand for a proper cluster of n points.</td></tr>
+    <tr><td>X↑ⁿ, X↑<sup>ω</sup></td><td>Points reachable from X in exactly n steps; in at least one step.</td></tr>
+    <tr><td>X↓ₙ, X↓<sub>ω</sub></td><td>The same backwards.</td></tr>
+    <tr><td>X↑̲<sup>ξ</sup>, X↓̲<sub>ξ</sub></td><td>Underlined arrow: also include X itself. X↑̲<sup>ω</sup> = everything reachable in zero or more steps.</td></tr>
+    <tr><td>ma</td><td>McKinsey formula □◇p → ◇□p.</td></tr>
+  </table></div>
+
+  <h3>Clusters</h3>
+  <div class="box stmt"><span class="tag">Definition</span><p>Let 𝔉 be <b>transitive</b>. Put <m>x ∼ y</m> iff x = y or (xRy and yRx). This is an equivalence relation; its classes are <b>clusters</b>, written C(x).</p></div>
+  <div class="box idea"><span class="tag">Picture it</span><p>A cluster is a group of friends who can all reach each other. Inside the group everyone sees the same "outside world", so nobody in the group can be told apart by □ or ◇ formulas.</p></div>
+  <div class="box stmt"><span class="tag">Proposition</span><p>On a transitive frame, for every y ∈ C(x): <m>x ⊨ □φ</m> iff <m>y ⊨ □φ</m>, and <m>x ⊨ ◇φ</m> iff <m>y ⊨ ◇φ</m>. (Atoms can still differ inside a cluster.)</p>
+  <p class="proofidea">Why: if xRy and yRx, transitivity gives x and y exactly the same successors.</p></div>
+
+  <h4>Three types of clusters</h4>
+  <p>A reflexive and transitive relation is a <b>quasi-order</b> (also called preorder).</p>
+  <div class="figrow">
+    <figure class="kd" data-d="cl-deg"><figcaption>degenerate: one irreflexive point</figcaption></figure>
+    <figure class="kd" data-d="cl-simp"><figcaption>simple: one reflexive point</figcaption></figure>
+    <figure class="kd" data-d="cl-prop"><figcaption>proper: ≥ 2 points, drawn ⓝ</figcaption></figure>
+  </div>
+  <div class="box trap"><span class="tag">Common confusion · irreflexive points</span><p>An irreflexive point x does not see itself, but x ∼ x still holds because of the "x = y" clause. So it forms its own cluster {x}, the <b>degenerate</b> one. Points in a proper cluster are automatically reflexive (xRyRx gives xRx).</p></div>
+
+  <h3>The skeleton (quotient frame)</h3>
+  <div class="box stmt"><span class="tag">Definition</span><p>For a transitive 𝔉, the <b>quotient frame</b> or <b>skeleton</b> is <m>ρ𝔉 = ⟨W/∼, R/∼⟩</m> with <m>C(x) R/∼ C(y)</m> iff xRy. The skeleton is always <b>antisymmetric</b>. If R is reflexive (a quasi-order), the skeleton is a <b>partial order</b>.</p></div>
+  <div class="box exam"><span class="tag">Exam method · build the quotient and name the clusters</span>
+    <ol class="steps">
+      <li><b>Check transitivity first</b>, because clusters are defined for transitive frames. If R is not transitive, say so and work with its transitive closure (add the missing shortcut pairs, and list them).</li>
+      <li>Find all pairs with xRy and yRx, x ≠ y. Merge them into groups.</li>
+      <li>Every point not merged is its own cluster: <b>simple</b> if xRx, <b>degenerate</b> if not. Merged groups are <b>proper</b>.</li>
+      <li>Write ρW = list of clusters. Write ρR: C(x) ρR C(y) iff xRy (one representative pair is enough). Include C ρR C exactly when the cluster is not degenerate.</li>
+      <li>Draw it and state the shape (chain, fork, …) and whether it is a partial order.</li>
+    </ol>
+  </div>
+  <div class="box exam"><span class="tag">Worked example (practice, my own)</span>
+    <p>W = {0, 1, 2, 3, 4, 5}. 0 is irreflexive and sees 1 to 5. The rest is reflexive and transitive with 1 ↔ 2, 3 ↔ 4, and 1, 2 → 3, 4 → 5.</p>
+    <div class="figrow">
+      <figure class="kd" data-d="skel1"><figcaption>The frame 𝔉 (clusters circled)</figcaption></figure>
+      <figure class="kd" data-d="skel2"><figcaption>Its skeleton ρ𝔉</figcaption></figure>
+    </div>
+    <ol class="steps">
+      <li>Transitive: yes (every path's shortcut is present).</li>
+      <li>Mutual pairs: 1R2 and 2R1; 3R4 and 4R3. So {1, 2} and {3, 4} are proper clusters.</li>
+      <li>5 is reflexive and alone: simple cluster {5}. 0 is irreflexive and alone: degenerate cluster {0}.</li>
+      <li>ρW = { {0}, {1,2}, {3,4}, {5} }. ρR: {0} → {1,2} → {3,4} → {5} plus the transitive shortcuts, and a loop on each cluster except {0}.</li>
+      <li>The skeleton is a 4-element chain. It is not a partial order, because {0} is irreflexive (R was not reflexive at 0).</li>
+    </ol>
+  </div>
+
+  <h3>The McKinsey formula is not valid everywhere</h3>
+  <div class="figrow"><figure class="kd" data-d="mck"><figcaption>W = {a₁, a₂}, universal R, V(p) = {a₁}</figcaption></figure></div>
+  <ol class="steps">
+    <li>Each point sees a₁, where p is true, so <m>◇p</m> holds at both points. Hence <m>□◇p</m> holds at both.</li>
+    <li>Each point sees a₂, where p is false, so <m>□p</m> fails at both. Hence <m>◇□p</m> fails at both.</li>
+    <li>So <m>□◇p → ◇□p</m> fails at a₁ and a₂. With K_ML = {φ : valid in all frames}, we get <m>ma ∉ K_ML</m>.</li>
+  </ol>
+  <p>Notice the cluster proposition at work: a₁ and a₂ disagree on p but agree on every □ or ◇ formula.</p>
+
+  <h3>Up-sets in non-transitive frames</h3>
+  <p>The three <b>truth preserving operations</b> (generated subframes, reductions, disjoint unions) come back in modal form. Since modal frames need not be transitive, "everything above x" needs care:</p>
+  <ul>
+    <li><m>X↑ⁿ</m> = points reachable from X in exactly n steps; <m>X↑<sup>ω</sup></m> = union over n ≥ 1; <m>X↑̲<sup>ω</sup> = X ∪ X↑<sup>ω</sup></m>.</li>
+    <li>Example from the slide: W = {a, b, c}, R = {(a,b), (b,c)}. Then <m>a↑ = {b}</m> (c is <b>not</b> a direct successor), the upward closure of a is {a, b, c}, and <m>a↓ = ∅</m>.</li>
+  </ul>
+  <div class="box stmt"><span class="tag">Definitions</span>
+    <ul>
+      <li>The upward closed set <b>generated by X</b> is <m>X↑̲<sup>ω</sup></m>.</li>
+      <li>x is a <b>root</b> of 𝔉 if the subframe generated by x is all of 𝔉. A non-transitive frame can have several roots (the slide's frame with a 2-point cluster {a, b} at the bottom has roots a and b).</li>
+      <li>The cluster generated by x is <m>x↑̲ ∩ x↓̲</m>: points you can reach and that can reach you.</li>
+      <li>In a transitive frame, x is a <b>final point</b> and C(x) a <b>final cluster</b> in X if <m>x↑ ∩ X = C(x) ∩ X</m> (nothing in X strictly above).</li>
+      <li>x is a <b>last point</b> and C(x) the <b>last cluster</b> in X if <m>X ⊆ x↓̲</m> (everyone in X sees x).</li>
+      <li>X is a <b>cover</b> for Y if <m>Y ⊆ X↓</m> (every point of Y sees some point of X).</li>
+    </ul>
+  </div>
+  <div class="box trap"><span class="tag">Common confusion · x↑ in non-transitive frames</span><p>In Int (transitive) x↑ was "everything above x". In a non-transitive modal frame, x↑ is only the <b>one-step</b> successors. The full future is x↑̲<sup>ω</sup>.</p></div>
+
+  <div class="selfcheck">
+    <h3>Self-check</h3>
+    <details class="q"><summary>Can a cluster contain an irreflexive point together with other points?</summary><p>No. If x is in a cluster with y ≠ x then xRy and yRx, so by transitivity xRx.</p></details>
+    <details class="q"><summary>Why must you check transitivity before computing clusters?</summary><p>The definition of ∼ is only an equivalence relation when R is transitive. Without it, x ∼ y and y ∼ z need not give x ∼ z.</p></details>
+    <details class="q"><summary>The skeleton of a quasi-order is a ...?</summary><p>Partial order (reflexive, transitive, antisymmetric).</p></details>
+  </div>
+</section>
+
+<section class="chapter" id="l19">
+  <div class="eyebrow">Lecture 19</div>
+  <h2>Generation, reduction and trees for modal logic</h2>
+  <p class="lead">The Int tools from lectures 9 to 11 carry over to modal frames, with small changes because R can now be anything.</p>
+
+  <h4>Symbols in this chapter</h4>
+  <div class="tablewrap"><table class="symtab">
+    <tr><th>Symbol</th><th>Meaning</th></tr>
+    <tr><td>𝔊 ⊑ 𝔉</td><td>𝔊 is a generated subframe of 𝔉 (its point set is upward closed: x in and xRy ⇒ y in).</td></tr>
+    <tr><td>K, K_ML</td><td>The basic modal logic: all formulas valid in every frame.</td></tr>
+    <tr><td>∘, •</td><td>The one-point reflexive frame, the one-point irreflexive frame.</td></tr>
+    <tr><td>⟨ℕ, &lt;⟩</td><td>Natural numbers 0, 1, 2, … with n R m iff n &lt; m.</td></tr>
+    <tr><td>R*</td><td>Reflexive transitive closure of R: x R* y iff y is reachable in zero or more steps.</td></tr>
+    <tr><td>strict partial order</td><td>Irreflexive and transitive relation.</td></tr>
+  </table></div>
+
+  <h3>Generation</h3>
+  <div class="box stmt"><span class="tag">Generation theorem</span><p>If 𝔑 is a generated submodel of 𝔐, then <m>(𝔑, x) ⊨ φ</m> iff <m>(𝔐, x) ⊨ φ</m> for every x in 𝔑.</p>
+  <p><b>Corollary.</b> If 𝔊 ⊑ 𝔉 then <m>𝔉 ⊨ φ ⇒ 𝔊 ⊨ φ</m>. And <m>K = {φ : 𝔉 ⊨ φ for all rooted 𝔉}</m>.</p></div>
+
+  <h3>Reduction</h3>
+  <p>Same definition as Int (onto, R1 forth, R2 back), now for arbitrary relations.</p>
+  <div class="box stmt"><span class="tag">Reduction theorem</span><p>If f reduces model 𝔐 to 𝔑 then <m>(𝔐, x) ⊨ φ</m> iff <m>(𝔑, f(x)) ⊨ φ</m>. <b>Corollary:</b> if 𝔉 reduces to 𝔊 then <m>𝔉 ⊨ φ ⇒ 𝔊 ⊨ φ</m>.</p></div>
+
+  <div class="box exam"><span class="tag">Worked example · reducing ⟨ℕ, &lt;⟩</span>
+    <div class="figrow">
+      <figure class="kd" data-d="nat"><figcaption>(a) ⟨ℕ, &lt;⟩, transitive, irreflexive</figcaption></figure>
+      <figure class="kd" data-d="nat2"><figcaption>(b) proper 2-cluster on {0, 1}</figcaption></figure>
+      <figure class="kd" data-d="nat3"><figcaption>(c) ∘</figcaption></figure>
+    </div>
+    <ol class="steps">
+      <li><b>f(n) = n mod 2</b> onto (b). Onto: f(0) = 0, f(1) = 1. Forth: in (b) everything sees everything, so R1 is automatic. Back: if f(n) sees v, choose m &gt; n with m mod 2 = v (n+1 or n+2). Then n &lt; m and f(m) = v.</li>
+      <li><b>g(n) = 0</b> onto (c). Forth trivial. Back: g(n) sees 0, take m = n + 1.</li>
+      <li>Without transitive closure (n sees only n+1): g still works, but f fails back. f(n) sees f(n) itself in (b), so n needs a successor of the same parity, and its only successor n+1 has the other parity.</li>
+      <li>General fact: a reduction can never send a reflexive point to an irreflexive one (R1 on xRx gives f(x) S f(x)). The opposite direction is allowed, as here.</li>
+    </ol>
+  </div>
+
+  <div class="box stmt"><span class="tag">Proposition</span><p>If φ is valid in some frame, then φ is valid in ∘ or in •.</p>
+  <p class="proofidea">Why: if the frame has a dead end x, then {x} alone is a generated subframe, which is •. If it has no dead end, mapping every point to ∘ is a reduction (back works because every point has a successor).</p></div>
+  <div class="box idea"><span class="tag">Use it</span><p>To prove a formula is valid in <b>no</b> frame, it is enough to show it fails in ∘ and in •. Example: <m>□p ∧ ◇¬p</m> fails in ∘ (□p forces p at the only point, so ◇¬p is false) and in • (◇ of anything is false at a dead end).</p></div>
+
+  <h3>Trees and unravelling</h3>
+  <p>A modal frame is a <b>tree</b> if its reachability order R* is a tree partial order (rooted, every point has finitely many predecessors forming a chain). An <b>intransitive tree</b> is one where R links each node only to its immediate children.</p>
+  <div class="box stmt"><span class="tag">Theorem</span><p>Every rooted modal frame is a reduct of some intransitive tree. <b>Corollary:</b> <m>K = {φ : 𝔉 ⊨ φ for all intransitive trees 𝔉}</m>.</p>
+  <p class="proofidea">Construction in one line: points of the tree are finite paths ⟨v₀, v₁, …, vₙ⟩ from the root; a path sees its one-step extensions; f sends a path to its last point.</p></div>
+  <div class="box idea"><span class="tag">Picture it</span><p>Unravelling is like writing down every possible journey from home. A city visited twice by different routes becomes two separate tree nodes, but the "last city" map glues them back.</p></div>
+
+  <h3>The Bulldozer theorem</h3>
+  <div class="box stmt"><span class="tag">Theorem</span><p>(i) Every transitive frame is a reduct of a <b>strict partial order</b> frame. (ii) Every quasi-order frame is a reduct of a <b>partial order</b> frame.</p>
+  <p class="proofidea">Idea: replace every non-degenerate cluster by infinitely many copies of its points, ordered in a long strictly increasing line ("bulldozing" the cluster flat). Degenerate clusters need only one copy. Mapping each copy back to its original is a reduction.</p></div>
+  <p>Why it matters: clusters can always be "unfolded" without changing which formulas are valid. So K4 can be studied on strict partial orders and S4 on partial orders.</p>
+
+  <div class="selfcheck">
+    <h3>Self-check</h3>
+    <details class="q"><summary>Can ∘ be reduced onto •?</summary><p>No: the reflexive point would have to map to an irreflexive one, which breaks R1.</p></details>
+    <details class="q"><summary>Why does ⟨ℕ, &lt;⟩ validate □p → ◇p?</summary><p>Every n sees n+1, so □p true at n gives p at n+1, hence ◇p at n. (The frame is serial: no dead ends.) Careful: reductions only carry validity <b>from</b> 𝔉 <b>to</b> its reduct, never back, so "it reduces to ∘" alone would not prove this.</p></details>
+    <details class="q"><summary>What does the generation corollary let you assume when hunting for a countermodel?</summary><p>That the frame is rooted at the point where the formula fails.</p></details>
+  </div>
+</section>
+<section class="chapter" id="l20">
+  <div class="eyebrow">Lecture 20</div>
+  <h2>Modal tableaux, Hintikka systems, finite model property of K</h2>
+  <p class="lead">Same countermodel hunt as the Int tableaux in <a href="#b-hint">basics §6</a>, but the trigger for a new point is now a <b>□ on the right</b>.</p>
+
+  <h4>Symbols in this chapter</h4>
+  <div class="tablewrap"><table class="symtab">
+    <tr><th>Symbol</th><th>Meaning</th></tr>
+    <tr><td>t = (Γ, Δ)</td><td>Tableau: Γ must be true, Δ must be false (drawn as Γ | Δ).</td></tr>
+    <tr><td>S1 to S6</td><td>The six classical saturation rules (all six apply inside a point, since modal → is classical).</td></tr>
+    <tr><td>𝔥 = ⟨T, S⟩</td><td>Hintikka system: T a set of tableaux, S a relation on T playing the role of R.</td></tr>
+    <tr><td>t ⊆ t′</td><td>Γ ⊆ Γ′ and Δ ⊆ Δ′.</td></tr>
+    <tr><td>|Σ|, Sub φ</td><td>Number of formulas in Σ; set of subformulas of φ.</td></tr>
+    <tr><td>sc</td><td>□(□p → q) ∨ □(□q → p)</td></tr>
+    <tr><td>grz</td><td>Grzegorczyk formula □(□(p → □p) → p) → p</td></tr>
+  </table></div>
+
+  <h3>The two modal rules</h3>
+  <div class="fm">(HS_M1) if t S t′ and □ψ ∈ Γ, then ψ ∈ Γ′   (a true box is copied into every successor)<br>(HS_M2) if □ψ ∈ Δ, there is t′ with t S t′ and ψ ∈ Δ′   (a false box needs a witness successor)</div>
+  <p>A <b>Hintikka system in K</b> is a non-empty set T of disjoint saturated tableaux with a relation S satisfying HS_M1 and HS_M2. It is a <b>Hintikka system for t</b> if t ⊆ t′ for some t′ in T. A tableau is <b>realized</b> at x if everything in Γ is true at x and everything in Δ is false there; <b>realizable in K</b> if realized in some model.</p>
+  <div class="box stmt"><span class="tag">Propositions</span><p>t is realizable in K iff there is a Hintikka system for t. A Hintikka system for (∅, {φ}) refutes φ.</p></div>
+  <div class="box stmt"><span class="tag">Theorem · finite size</span><p>t is realizable in K iff there is a Hintikka system for t with at most <m>2<sup>|Σ|</sup></m> tableaux, Σ = all subformulas of formulas in t.</p>
+  <p class="proofidea">Why: from a model, take for each point x the tableau t_x = (formulas of Σ true at x | formulas of Σ false at x). It is determined by a subset of Σ, so there are at most 2<sup>|Σ|</sup> different ones.</p></div>
+  <div class="box stmt"><span class="tag">Corollaries · finite model property</span><p>(i) Every φ ∉ K is refuted on a rooted frame with at most <m>2<sup>|Sub φ|</sup></m> points. (ii) Every φ ∉ K is refuted on a finite intransitive tree. So <m>K = {φ : valid on all finite intransitive trees}</m>.</p></div>
+
+  <div class="box exam"><span class="tag">Exam method · modal countermodel by tableau</span>
+    <ol class="steps">
+      <li>Put φ on the right of t₀. Apply S1 to S6 inside the point (→ on the right: premise left, conclusion right).</li>
+      <li>For each <b>□ψ on the right</b>: make a new successor with ψ on its right.</li>
+      <li>For each <b>□χ on the left</b>: put χ on the left of <b>every</b> successor. If the frame must be reflexive, also put χ on the left of the same point. If it must be transitive, also copy □χ itself to successors.</li>
+      <li>Repeat until nothing new appears. Read off W, R and V(p) = points with p on the left. Then verify at t₀.</li>
+    </ol>
+  </div>
+
+  <h4>Example · countermodel for sc</h4>
+  <div class="figrow">
+    <figure class="kd" data-d="sc1"><figcaption>Three-point version, V(p) = V(q) = ∅</figcaption></figure>
+    <figure class="kd" data-d="sc2"><figcaption>Merged version, two points</figcaption></figure>
+  </div>
+  <ol class="steps">
+    <li>t₀ right: <m>□(□p → q) ∨ □(□q → p)</m>. S4: both disjuncts go right.</li>
+    <li><m>□(□p → q)</m> on the right: successor t₁ with □p → q on the right, so □p left, q right.</li>
+    <li><m>□(□q → p)</m> on the right: successor t₂ with □q left, p right.</li>
+    <li>The boxes at t₁, t₂ are on the left, so no new points. t₁ and t₂ are dead ends.</li>
+    <li>Check: t₁ ⊨ □p (dead end), t₁ ⊭ q, so t₁ ⊭ □p → q and t₀ ⊭ □(□p → q). Symmetrically t₀ ⊭ □(□q → p). So t₀ ⊭ sc.</li>
+    <li>Gluing t₁ and t₂ into one dead end t (□p, □q | p, q) gives a smaller countermodel.</li>
+  </ol>
+
+  <h4>Example · countermodel for grz, then a reflexive one</h4>
+  <div class="figrow">
+    <figure class="kd" data-d="grz1"><figcaption>Irreflexive one-point countermodel</figcaption></figure>
+    <figure class="kd" data-d="grz2"><figcaption>Reflexive, not transitive: V(p) = {t₁}</figcaption></figure>
+  </div>
+  <ol class="steps">
+    <li>Any frame: t₀ right gets grz, so <m>□(□(p → □p) → p)</m> left and p right. The box is on the left, so no successor is required. One irreflexive point with p false refutes grz.</li>
+    <li>Reflexive frame required: the left box also puts <m>□(p → □p) → p</m> on the left of t₀ itself. S5: p can't go left (clash), so <m>□(p → □p)</m> goes right.</li>
+    <li>That false box needs t₁ with <m>p → □p</m> on the right: p left, □p right.</li>
+    <li>□p false at t₁ needs t₂ with p right.</li>
+    <li>Frame: t₀ → t₁ → t₂, each reflexive, <b>no</b> t₀ → t₂. V(p) = {t₁}.</li>
+    <li>Check: t₁ ⊭ □p (t₂ has no p), so t₁ ⊭ p → □p, so t₀ ⊭ □(p → □p), so <m>□(p→□p) → p</m> is true at t₀; at t₁ it is true because p is. So t₀ ⊨ □(□(p → □p) → p), t₀ ⊭ p: grz fails.</li>
+  </ol>
+  <div class="box trap"><span class="tag">Common confusion · which side triggers what</span><p>Box on the <b>right</b> (false) creates a successor. Box on the <b>left</b> (true) never creates anything, it only fills in existing successors. Mixing these up is the classic tableau error. (In Int tableaux the trigger was an implication on the right.)</p></div>
+
+  <div class="selfcheck">
+    <h3>Self-check</h3>
+    <details class="q"><summary>Why are all six rules S1 to S6 allowed inside a modal point, but only S1 to S5 in Int?</summary><p>Modal → is classical (it looks only at the current point). In Int, a false implication needs a later point, so S6 is replaced by HS_I2.</p></details>
+    <details class="q"><summary>What is the size bound for a countermodel of φ ∉ K?</summary><p>At most 2<sup>|Sub φ|</sup> points, on a rooted frame.</p></details>
+    <details class="q"><summary>Why was transitivity dropped in the reflexive grz countermodel?</summary><p>grz is valid on all finite partial orders, so a finite reflexive countermodel must break transitivity (or antisymmetry).</p></details>
+  </div>
+</section>
+
+<section class="chapter" id="l21">
+  <div class="eyebrow">Lecture 21 · high priority</div>
+  <h2>Correspondence theory: formulas and frame conditions</h2>
+  <p class="lead">Many modal formulas are valid on a frame exactly when the arrows of the frame have some shape. Proving "𝔉 ⊨ φ iff 𝔉 has property P" is a standard exam question, and it always follows the same two-half recipe.</p>
+
+  <h4>Symbols in this chapter</h4>
+  <div class="tablewrap"><table class="symtab">
+    <tr><th>Symbol</th><th>Meaning</th></tr>
+    <tr><td>𝔉 ⊨ φ</td><td>φ is true at every point of 𝔉 under <b>every</b> valuation. 𝔉 ⊭ φ: some valuation and some point make φ false.</td></tr>
+    <tr><td>∀, ∃</td><td>for all, there exists.</td></tr>
+    <tr><td>xRⁿy</td><td>y reachable from x in exactly n steps (xR⁰y means x = y).</td></tr>
+    <tr><td>ga_klmn</td><td>Geach formula ◇ᵏ□ˡp → □ᵐ◇ⁿp (k, l, m, n are just counting numbers).</td></tr>
+    <tr><td>ref, tra, sym, ser, euc</td><td>Names of the axioms □p→p, □p→□□p, p→□◇p, □p→◇p, ◇□p→□p.</td></tr>
+  </table></div>
+
+  <h3>The recipe (memorise this)</h3>
+  <div class="box exam"><span class="tag">Exam method · proving 𝔉 ⊨ φ ⟺ 𝔉 has property P</span>
+    <p><b>Half 1 (P ⇒ valid).</b> Suppose 𝔉 has P, and suppose φ fails at some x under some valuation. Unfold what "φ false at x" forces (which points must exist, what is true where). Use P to reach a contradiction.</p>
+    <p><b>Half 2 (valid ⇒ P), by contrapositive.</b> Suppose 𝔉 does <b>not</b> have P. Name the bad points that witness the failure. Choose a valuation V(p) that makes φ false at one of them. Then 𝔉 ⊭ φ.</p>
+    <p><b>How to pick V(p) in half 2:</b></p>
+    <ul>
+      <li>p sits under a <b>□ on the left</b> of the arrow (like □p → …): make p true at exactly the points the box needs: <m>V(p) = R(x)</m> (x's successors), or <m>V(p) = W ∖ {x}</m>.</li>
+      <li>p appears <b>bare or under a ◇ on the right</b>: make p true at as little as possible, usually <m>V(p) = {x}</m>.</li>
+    </ul>
+  </div>
+
+  <h3>Reflexivity: ref = □p → p</h3>
+  <div class="box stmt"><span class="tag">Proposition</span><p>𝔉 ⊨ □p → p iff 𝔉 is reflexive (∀x xRx).</p></div>
+  <ol class="steps">
+    <li><b>Reflexive ⇒ valid.</b> Suppose x ⊨ □p. Since xRx, x is one of its own successors, so x ⊨ p.</li>
+    <li><b>Valid ⇒ reflexive (contrapositive).</b> Suppose some x has ¬xRx. Put V(p) = W ∖ {x}.</li>
+    <li>Every successor of x is different from x, so lies in V(p): x ⊨ □p. But x ∉ V(p): x ⊭ p. So x ⊭ □p → p.</li>
+  </ol>
+
+  <h3>Transitivity: tra = □p → □□p</h3>
+  <div class="box stmt"><span class="tag">Proposition</span><p>𝔉 ⊨ □p → □□p iff 𝔉 is transitive.</p></div>
+  <ol class="steps">
+    <li><b>Transitive ⇒ valid.</b> Suppose x ⊨ □p, xRy, yRz. Transitivity gives xRz, so z ⊨ p. Hence every successor y of x has y ⊨ □p, so x ⊨ □□p.</li>
+    <li><b>Valid ⇒ transitive.</b> Suppose xRy, yRz but ¬xRz. Put V(p) = {w : xRw}.</li>
+    <li>x ⊨ □p by the choice of V. z ∉ V(p), so y ⊭ □p, so x ⊭ □□p.</li>
+  </ol>
+
+  <h3>Symmetry: sym = p → □◇p (fully worked, it was on the past paper)</h3>
+  <div class="box stmt"><span class="tag">Proposition</span><p>𝔉 ⊨ p → □◇p iff 𝔉 is symmetric (∀x, y: xRy ⇒ yRx).</p></div>
+  <div class="figrow"><figure class="kd" data-d="symcm"><figcaption>The failure picture: xRy but not yRx, V(p) = {x}</figcaption></figure></div>
+  <ol class="steps">
+    <li><b>Symmetric ⇒ valid.</b> Take any valuation and any x. Suppose x ⊨ p; we must show x ⊨ □◇p.</li>
+    <li>Take any y with xRy. By symmetry yRx. So y has a successor (namely x) where p is true: y ⊨ ◇p.</li>
+    <li>y was arbitrary, so x ⊨ □◇p. Hence x ⊨ p → □◇p at every point: 𝔉 ⊨ sym.</li>
+    <li><b>Valid ⇒ symmetric (contrapositive).</b> Suppose 𝔉 is not symmetric: there are x, y with xRy and ¬yRx.</li>
+    <li>Define V(p) = {x}. Then x ⊨ p.</li>
+    <li>The only p-point is x, and y does not see x, so y ⊭ ◇p.</li>
+    <li>Since xRy and y ⊭ ◇p, we get x ⊭ □◇p.</li>
+    <li>So x ⊨ p and x ⊭ □◇p: x ⊭ p → □◇p, hence 𝔉 ⊭ sym. Both halves done. ∎</li>
+  </ol>
+  <div class="box idea"><span class="tag">Picture it</span><p>p → □◇p says "if I am here, every place I can go has a road back to a p-place". Making only x a p-place forces "road back to x", i.e. symmetry.</p></div>
+
+  <h3>Seriality: ser = □p → ◇p</h3>
+  <div class="box stmt"><span class="tag">Proposition</span><p>𝔉 ⊨ □p → ◇p iff 𝔉 is serial (∀x ∃y xRy, no dead ends).</p></div>
+  <ol class="steps">
+    <li><b>Serial ⇒ valid.</b> If x ⊨ □p, pick a successor y (exists by seriality). y ⊨ p, so x ⊨ ◇p.</li>
+    <li><b>Valid ⇒ serial.</b> If x is a dead end, then under <b>any</b> valuation x ⊨ □p (vacuous) and x ⊭ ◇p (no witness).</li>
+  </ol>
+
+  <h3>The Geach family: one theorem covering most of these</h3>
+  <div class="box stmt"><span class="tag">Proposition</span><p><m>𝔉 ⊨ ◇ᵏ□ˡp → □ᵐ◇ⁿp</m> iff <m>∀x, y, z (xRᵏy ∧ xRᵐz → ∃u (yRˡu ∧ zRⁿu))</m>.</p>
+  <p class="proofidea">In words: go k steps from x to y and m steps from x to z; then y (in l steps) and z (in n steps) must be able to meet at a common u. For half 2 the slide uses V(p) = {u : yRˡu}.</p></div>
+  <div class="figrow"><figure class="kd" data-d="geach"><figcaption>The Geach picture: two paths from x must be completed to meet at u</figcaption></figure></div>
+  <div class="tablewrap"><table class="symtab">
+    <tr><th>Name</th><th>Formula</th><th>k l m n</th><th>Frame condition</th></tr>
+    <tr><td>ref</td><td>□p → p</td><td>0 1 0 0</td><td>xRx</td></tr>
+    <tr><td>tra</td><td>□p → □□p</td><td>0 1 2 0</td><td>xRyRz ⇒ xRz</td></tr>
+    <tr><td>sym</td><td>p → □◇p</td><td>0 0 1 1</td><td>xRy ⇒ yRx</td></tr>
+    <tr><td>ser</td><td>□p → ◇p</td><td>0 1 0 1</td><td>∀x ∃y xRy</td></tr>
+    <tr><td>euc</td><td>◇□p → □p</td><td>1 1 1 0</td><td>Euclidean: xRy ∧ xRz ⇒ yRz</td></tr>
+    <tr><td>ga</td><td>◇□p → □◇p</td><td>1 1 1 1</td><td>strongly directed: xRy ∧ xRz ⇒ ∃u (yRu ∧ zRu)</td></tr>
+    <tr><td>den_n</td><td>□ⁿ⁺¹p → □ⁿp</td><td>0 n+1 n 0</td><td>n-dense: xRⁿy ⇒ xRⁿ⁺¹y</td></tr>
+  </table></div>
+  <div class="box exam"><span class="tag">How to read off a condition from k l m n</span>
+    <ol class="steps">
+      <li>Write the general Geach condition.</li>
+      <li>Replace every R⁰ by equality and simplify (e.g. xR⁰y means y = x).</li>
+      <li>Example, sym (0 0 1 1): y = x; xRz ⇒ ∃u (u = x ∧ zRu), which is xRz ⇒ zRx.</li>
+    </ol>
+  </div>
+
+  <h3>The other named conditions on the slides</h3>
+  <ul>
+    <li><b>n-transitive</b>: <m>xRⁿ⁺¹y ⇒ xRy ∨ xR²y ∨ … ∨ xRⁿy</m> (anything reachable in n+1 steps is reachable in at most n). Matching formula <m>tra_n = (⋀ᵢ □ⁱp) → □ⁿ⁺¹p</m>, with i from 1 to n. For n = 1 this is ordinary transitivity.</li>
+    <li><b>dense</b>: xRy ⇒ xR²y. Formula den₁ = □□p → □p.</li>
+    <li><b>directed</b>: <m>xRy ∧ xRz ∧ y ≠ z ⇒ ∃u (yRu ∧ zRu)</m>. Formula <m>dir = ◇(□p ∧ q) → □(◇p ∨ q)</m>. The extra q lets the case y = z escape.</li>
+    <li><b>strongly connected</b>: <m>xRy ∧ xRz ⇒ yRz ∨ zRy</m>. Formula <m>sc = □(□p → q) ∨ □(□q → p)</m>. The lecture 20 countermodels are exactly frames where this fails.</li>
+  </ul>
+  <div class="box trap"><span class="tag">Common confusion · frame validity versus truth in one model</span><p>"𝔉 ⊨ φ" quantifies over <b>all</b> valuations. So to show 𝔉 ⊭ φ you get to <b>choose</b> one valuation (that is why half 2 picks V(p)). To show 𝔉 ⊨ φ you must handle an <b>arbitrary</b> valuation (that is why half 1 never picks V).</p></div>
+
+  <div class="selfcheck">
+    <h3>Self-check</h3>
+    <details class="q"><summary>Which k l m n gives □p → □□p, and why?</summary><p>0 1 2 0: ◇⁰□¹p → □²◇⁰p = □p → □□p.</p></details>
+    <details class="q"><summary>To refute ◇□p → □p on a non-Euclidean frame (xRy, xRz, ¬yRz), which valuation?</summary><p>V(p) = {u : yRu}. Then y ⊨ □p so x ⊨ ◇□p, and z ∉ V(p) so x ⊭ □p.</p></details>
+    <details class="q"><summary>In the sym proof, why V(p) = {x} and not V(p) = W ∖ {x}?</summary><p>p appears bare on the left and under ◇ on the right. We want p true at x but nowhere y can see, so as small as possible: just {x}.</p></details>
+  </div>
+</section>
+<section class="chapter" id="l22">
+  <div class="eyebrow">Lecture 22</div>
+  <h2>The calculus K and the logics T, K4, S4, S5, D</h2>
+  <p class="lead">So far "K" was defined semantically (valid on all frames). Now we get a proof system for it, and then add one axiom at a time to get logics for special classes of frames.</p>
+
+  <h4>Symbols in this chapter</h4>
+  <div class="tablewrap"><table class="symtab">
+    <tr><th>Symbol</th><th>Meaning</th></tr>
+    <tr><td>⊢_K φ</td><td>φ is derivable in the calculus K.</td></tr>
+    <tr><td>A11</td><td>□(p₀ → p₁) → (□p₀ → □p₁), the distribution axiom (often itself called "the K axiom").</td></tr>
+    <tr><td>RN</td><td>Necessitation rule: from φ infer □φ.</td></tr>
+    <tr><td>L ⊕ φ</td><td>Add φ as an axiom to L and close under MP, Subst and RN.</td></tr>
+    <tr><td>𝒞</td><td>A class (collection) of frames.</td></tr>
+    <tr><td>re / ref, tra, sym, ser</td><td>□p→p, □p→□□p, p→□◇p, □p→◇p.</td></tr>
+  </table></div>
+
+  <div class="box trap"><span class="tag">Common confusion · what does "K" mean?</span>
+    <ul>
+      <li><b>K the logic</b>: the set of formulas valid on <b>all</b> frames. No conditions on the arrows. It is the floor: every normal modal logic contains it.</li>
+      <li><b>K the calculus</b>: A1 to A11 with MP, Subst, RN. By soundness and completeness it proves exactly the logic K, so the same name is fine.</li>
+      <li><b>"the K axiom"</b>: just A11.</li>
+      <li>A lowercase k (as in ga_klmn) is only a counter. It has nothing to do with K.</li>
+    </ul>
+  </div>
+
+  <h3>The calculus K</h3>
+  <div class="fm">Axioms: A1 to A10 (classical, see <a href="#b-hilbert">basics §2</a>) and<br>(A11) □(p₀ → p₁) → (□p₀ → □p₁)<br>Rules: MP, Subst, and (RN) from φ infer □φ</div>
+  <div class="box trap"><span class="tag">Common confusion · RN</span><p>RN applies only to formulas you have <b>derived</b> (theorems). It never applies to assumptions: p ⊢ □p is false. If p is true here, that says nothing about other worlds. But if p is <b>provable</b>, it is true at every world, so □p is too.</p></div>
+
+  <h4>Example 1 · the derived rule "from φ → ψ get □φ → □ψ"</h4>
+  <ol class="steps">
+    <li><m>⊢ φ → ψ</m> (given)</li>
+    <li><m>⊢ □(φ → ψ)</m> (RN on 1)</li>
+    <li><m>⊢ □(φ → ψ) → (□φ → □ψ)</m> (A11 with Subst p₀ := φ, p₁ := ψ)</li>
+    <li><m>⊢ □φ → □ψ</m> (MP on 2, 3)</li>
+  </ol>
+
+  <h4>Example 2 · □ distributes over ∧: ⊢ □(φ ∧ ψ) ↔ □φ ∧ □ψ</h4>
+  <ol class="steps">
+    <li><m>⊢ φ ∧ ψ → φ</m> (A3) and so <m>⊢ □(φ ∧ ψ) → □φ</m> (Example 1)</li>
+    <li><m>⊢ φ ∧ ψ → ψ</m> (A4) and so <m>⊢ □(φ ∧ ψ) → □ψ</m> (Example 1)</li>
+    <li><m>⊢ □(φ ∧ ψ) → □φ ∧ □ψ</m> (combine 1 and 2 by classical reasoning)</li>
+    <li><m>⊢ φ → (ψ → φ ∧ ψ)</m> (A5) and so <m>⊢ □φ → □(ψ → φ ∧ ψ)</m> (Example 1)</li>
+    <li><m>⊢ □(ψ → φ ∧ ψ) → (□ψ → □(φ ∧ ψ))</m> (A11)</li>
+    <li><m>⊢ □φ → (□ψ → □(φ ∧ ψ))</m> (chain 4 and 5)</li>
+    <li><m>⊢ □φ ∧ □ψ → □(φ ∧ ψ)</m> (from 6: (α → (β → γ)) gives (α ∧ β → γ))</li>
+    <li><m>⊢ □(φ ∧ ψ) ↔ □φ ∧ □ψ</m> (3 and 7 joined with A5)</li>
+  </ol>
+  <p>By induction this extends to n conjuncts: <m>⊢ □(φ₁ ∧ … ∧ φₙ) ↔ □φ₁ ∧ … ∧ □φₙ</m>.</p>
+  <div class="box trap"><span class="tag">Common confusion · □ and ∨</span><p>□ distributes over ∧, but <b>not</b> over ∨. <m>□(p ∨ q) → □p ∨ □q</m> is not valid: a point seeing one p-world and one q-world has □(p ∨ q) but neither □p nor □q.</p></div>
+
+  <div class="box stmt"><span class="tag">Soundness and completeness of K</span><p><m>⊢_K φ</m> iff φ is valid in all frames. So K (calculus) = K (logic).</p></div>
+
+  <h3>Logics for classes of frames</h3>
+  <div class="box stmt"><span class="tag">Definitions</span>
+    <ul>
+      <li>A calculus C is <b>sound w.r.t. 𝒞</b> if everything C proves is valid in every frame of 𝒞.</li>
+      <li>C is <b>complete w.r.t. 𝒞</b> if everything valid in every frame of 𝒞 is provable in C.</li>
+      <li>A logic L is <b>characterized</b> (or <b>determined</b>) by 𝒞 if L = {φ : 𝔉 ⊨ φ for all 𝔉 ∈ 𝒞}.</li>
+      <li>𝔉 is a <b>frame for L</b> if 𝔉 validates every formula of L.</li>
+    </ul>
+  </div>
+  <div class="tablewrap"><table class="symtab plain">
+    <tr><th>Logic</th><th>Axioms</th><th>Characterized by</th></tr>
+    <tr><td><b>K</b></td><td>A1 to A11, MP, Subst, RN</td><td>all frames</td></tr>
+    <tr><td><b>D</b></td><td>K ⊕ □p → ◇p</td><td>serial frames (deontic logic)</td></tr>
+    <tr><td><b>T</b></td><td>K ⊕ □p → p</td><td>reflexive frames</td></tr>
+    <tr><td><b>K4</b></td><td>K ⊕ □p → □□p</td><td>transitive frames</td></tr>
+    <tr><td><b>S4</b></td><td>K ⊕ re ⊕ tra = T ⊕ tra = K4 ⊕ re</td><td>quasi-orders (reflexive + transitive)</td></tr>
+    <tr><td><b>S5</b></td><td>S4 ⊕ p → □◇p</td><td>universal frames (equivalently, equivalence relations)</td></tr>
+  </table></div>
+  <p>An <b>equivalence relation</b> is reflexive, transitive and symmetric. R is <b>universal</b> if every point sees every point. Every frame with an equivalence relation is a disjoint union of universal frames (one per equivalence class), so both classes validate the same formulas.</p>
+  <div class="figrow"><figure class="kd" data-d="lattice"><figcaption>Inclusions: an arrow means "is contained in"</figcaption></figure></div>
+  <p><m>K ⊂ D ⊂ T ⊂ S4 ⊂ S5</m> and <m>K ⊂ K4 ⊂ S4</m>.</p>
+  <div class="box trap"><span class="tag">Common confusion · more axioms, fewer frames</span><p>Adding an axiom makes the <b>logic bigger</b> (more theorems) and the <b>class of frames smaller</b> (fewer frames satisfy all axioms). S5 has the most theorems and the fewest frames.</p></div>
+  <div class="box exam"><span class="tag">Exam method · showing an inclusion is strict</span><p>To show L₁ ⊊ L₂, give a formula in L₂ (usually its extra axiom) and a frame for L₁ that refutes it. Examples: K ⊊ T because one irreflexive point is a frame for K and refutes □p → p. D ⊊ T because x → y with y reflexive and x not is serial but refutes □p → p at x (V(p) = {y}).</p></div>
+
+  <div class="selfcheck">
+    <h3>Self-check</h3>
+    <details class="q"><summary>Is p → □p a theorem of K?</summary><p>No. RN cannot be applied to an assumption. Countermodel: x sees y, p true at x, false at y.</p></details>
+    <details class="q"><summary>Which logic is characterized by quasi-orders?</summary><p>S4.</p></details>
+    <details class="q"><summary>Why is every reflexive frame a D-frame?</summary><p>Reflexive means every point sees itself, so every point has a successor: serial.</p></details>
+  </div>
+</section>
+
+<section class="chapter" id="l23">
+  <div class="eyebrow">Lecture 23</div>
+  <h2>From single logics to classes of logics</h2>
+  <p class="lead">Instead of studying T, S4, Cl one by one, study whole families: all logics above Int (superintuitionistic), all logics above K (normal modal).</p>
+
+  <h4>Symbols in this chapter</h4>
+  <div class="tablewrap"><table class="symtab">
+    <tr><th>Symbol</th><th>Meaning</th></tr>
+    <tr><td>si-logic</td><td>Superintuitionistic logic: a set L of formulas with Int ⊆ L, closed under MP and Subst.</td></tr>
+    <tr><td>For (For ℒ)</td><td>The set of all formulas: the inconsistent logic.</td></tr>
+    <tr><td>Int + Γ</td><td>Add the formulas Γ to Int and close under MP and Subst.</td></tr>
+    <tr><td>L₁ + L₂, Σᵢ Lᵢ</td><td>Sum: put all axioms together and close.</td></tr>
+    <tr><td>L₁ ∩ L₂</td><td>Formulas in both logics.</td></tr>
+    <tr><td>φ ∨̲ ψ</td><td>Repeatless disjunction: rename ψ's variables so φ and ψ share none, then take φ ∨ ψ.</td></tr>
+    <tr><td>Log 𝒞, Log 𝔉</td><td>The logic of a class of frames / of one frame: formulas valid in all of them.</td></tr>
+    <tr><td>ExtInt, ExtL</td><td>The lattice of all si-logics; the family of all extensions of L.</td></tr>
+    <tr><td>K + Γ, K ⊕ Γ</td><td>Close K ∪ Γ under MP, Subst; under MP, Subst <b>and RN</b>.</td></tr>
+  </table></div>
+
+  <h3>Intuitionistic versus superintuitionistic</h3>
+  <div class="box idea"><span class="tag">Picture it</span><p>Int is one specific logic (A1 to A9). "Superintuitionistic" is a <b>family</b>: every logic you get by starting from Int and adding axioms. Int is the bottom of the family, Cl is the top consistent member, For (everything) sits above Cl.</p></div>
+  <div class="box stmt"><span class="tag">Theorems</span>
+    <ul>
+      <li>For is the greatest si-logic, Int the smallest.</li>
+      <li>Every <b>consistent</b> si-logic L satisfies <m>Int ⊆ L ⊆ Cl</m>.</li>
+      <li>The intersection of any family of si-logics is a si-logic.</li>
+      <li>For any class 𝒞 of intuitionistic frames, Log 𝒞 is a si-logic.</li>
+    </ul>
+  </div>
+  <p>Examples: <m>Cl = Int + p ∨ ¬p</m>. <m>For = Int + p</m> (substitute ⊥ for p to get ⊥, then A9 gives everything). Strictly between them sits e.g. <m>Int + ¬p ∨ ¬¬p</m>: it proves weak excluded middle (so it is above Int), but not p ∨ ¬p (the 2-point chain with V(p) = {top} refutes p ∨ ¬p and validates ¬p ∨ ¬¬p, since that frame is strongly directed).</p>
+
+  <h3>Building logics: +, finite axioms, sums</h3>
+  <ul>
+    <li><b>Finitely axiomatizable</b>: L = Int + Γ with Γ finite. Since <m>Int + φ₁ + … + φₙ = Int + φ₁ ∧ … ∧ φₙ</m> (A3 to A5), one extra axiom is always enough.</li>
+    <li><b>Sum</b>: <m>(Int + Γ₁) + (Int + Γ₂) = Int + Γ₁ ∪ Γ₂</m>. Just pool the axioms.</li>
+    <li><b>Extension of L with Γ</b>: L + Γ, using L instead of Int as the base.</li>
+    <li><m>⊢_L φ</m> means derivable in L; φ ∈ L iff ⊢_L φ. <b>Generalized deduction theorem</b>: <m>Γ, ψ ⊢_L φ</m> iff <m>Γ ⊢_L ψ → φ</m>.</li>
+  </ul>
+
+  <h3>Intersections and the repeatless disjunction</h3>
+  <div class="box stmt"><span class="tag">Theorem</span><p>If L₁ = Int + {φᵢ} and L₂ = Int + {ψⱼ}, then <m>L₁ ∩ L₂ = Int + {φᵢ ∨̲ ψⱼ}</m>.</p></div>
+  <div class="box exam"><span class="tag">Worked example · why the variables must be renamed</span>
+    <ol class="steps">
+      <li>L₁ = Int + p = For. L₂ = Int + ¬p = For too (substitute p := ⊤, get ¬⊤, which gives ⊥). So L₁ ∩ L₂ = For.</li>
+      <li>Correct (repeatless): p ∨̲ ¬p = p ∨ ¬q. Substitute p := ⊥, q := ⊤: ⊥ ∨ ¬⊤, which is Int-equivalent to ⊥. So Int + (p ∨ ¬q) = For. ✔</li>
+      <li>Wrong (shared variable): Int + (p ∨ ¬p) = Cl ≠ For. ✘</li>
+    </ol>
+  </div>
+  <div class="box stmt"><span class="tag">Lattice laws</span><p>+ is idempotent (L + L = L), commutative, associative, and distributes over ∩; ∩ distributes over (infinite) sums. The family of si-logics with ∩ and + is the lattice <b>ExtInt</b>. If L ⊆ L′, L′ is an <b>extension</b> of L and L a <b>sublogic</b> of L′; ExtL is the family of L's extensions.</p></div>
+
+  <h3>Modal side: quasi-normal versus normal</h3>
+  <div class="box stmt"><span class="tag">Definitions</span>
+    <ul>
+      <li><b>Quasi-normal</b> modal logic: K ⊆ L, closed under MP and Subst. Written <m>L = K + Γ</m>. Smallest: K. Greatest: For ML.</li>
+      <li><b>Normal</b>: quasi-normal and also closed under <b>RN</b>. Written <m>L = K ⊕ Γ</m>.</li>
+    </ul>
+  </div>
+  <div class="box exam"><span class="tag">Example · K + Γ and K ⊕ Γ really differ</span>
+    <div class="figrow"><figure class="kd" data-d="qn"><figcaption>x sees y, y is a dead end</figcaption></figure></div>
+    <ol class="steps">
+      <li>Let L = all formulas true at x under every valuation. L contains K, and is closed under MP and Subst, so it is quasi-normal.</li>
+      <li><m>□⊥ → p ∈ L</m>: x sees y, and y ⊭ ⊥, so x ⊭ □⊥; the implication is true at x.</li>
+      <li><m>□(□⊥ → p) ∉ L</m>: at y, □⊥ is true (dead end); with V(p) = ∅, p is false at y, so y ⊭ □⊥ → p, and x ⊭ □(□⊥ → p).</li>
+      <li>So L is not closed under RN: quasi-normal but not normal.</li>
+    </ol>
+  </div>
+  <div class="box trap"><span class="tag">Common confusion · + versus ⊕</span><p>+ closes under MP and Subst. ⊕ also closes under RN. All the named logics (T, K4, S4, S5, D) are built with ⊕, so they are normal.</p></div>
+
+  <div class="selfcheck">
+    <h3>Self-check</h3>
+    <details class="q"><summary>Is Cl a si-logic?</summary><p>Yes: it contains Int and is closed under MP and Subst. It is the largest consistent one.</p></details>
+    <details class="q"><summary>Int + p = ?</summary><p>For, the inconsistent logic.</p></details>
+    <details class="q"><summary>What is the difference between quasi-normal and normal?</summary><p>Normal logics are also closed under RN (φ ∈ L ⇒ □φ ∈ L).</p></details>
+  </div>
+</section>
+<section class="chapter" id="l24">
+  <div class="eyebrow">Lecture 24</div>
+  <h2>Canonical models and completeness</h2>
+  <p class="lead">How do you prove a logic L is complete (everything valid on its frames is provable)? Build one giant model out of L itself, where every non-theorem fails somewhere. That model is the canonical model.</p>
+
+  <h4>Symbols in this chapter</h4>
+  <div class="tablewrap"><table class="symtab">
+    <tr><th>Symbol</th><th>Meaning</th></tr>
+    <tr><td>Γ ⊢_L φ</td><td>φ follows from assumptions Γ in L: some finite conjunction γ₁ ∧ … ∧ γₖ of members of Γ has (γ₁ ∧ … ∧ γₖ) → φ ∈ L. RN never applies to Γ.</td></tr>
+    <tr><td>L-consistent (Γ, Δ)</td><td>No disjunction of formulas from Δ follows from Γ. (Empty disjunction = ⊥, so also Γ ⊬ ⊥.)</td></tr>
+    <tr><td>maximal (Γ, Δ)</td><td>Every formula is in Γ or in Δ.</td></tr>
+    <tr><td>W_L</td><td>The set of all maximal L-consistent tableaux.</td></tr>
+    <tr><td>R_L</td><td>The canonical accessibility relation (two versions below).</td></tr>
+    <tr><td>𝔉_L = ⟨W_L, R_L⟩</td><td>The canonical frame.</td></tr>
+    <tr><td>V_L(p)</td><td>{(Γ, Δ) ∈ W_L : p ∈ Γ}.</td></tr>
+    <tr><td>𝔐_L = ⟨𝔉_L, V_L⟩</td><td>The canonical model.</td></tr>
+    <tr><td>NExt L</td><td>The lattice of normal extensions of L (ExtInt on the si side).</td></tr>
+    <tr><td>𝔉_L ⊨ L</td><td>Every formula of L is valid on the canonical frame (all valuations). Such L is called <b>canonical</b>.</td></tr>
+  </table></div>
+
+  <h3>Housekeeping first (pages 1, 2)</h3>
+  <ul>
+    <li><m>Σ Lᵢ</m> = closure of ⋃Lᵢ under MP and Subst. <m>⊕ Lᵢ</m> = closure under MP, Subst and RN.</li>
+    <li><m>K + φ₁ + … + φₙ = K + φ₁ ∧ … ∧ φₙ</m>, and the same with ⊕.</li>
+    <li>Normal (quasi-normal) logics containing L, with ∩ and ⊕ (+), form the lattice <b>NExt L</b>.</li>
+    <li><b>Theorem:</b> for any class 𝒞 of modal frames, Log 𝒞 is a <b>normal</b> modal logic. (Contains K; MP, Subst and RN all preserve frame validity.)</li>
+  </ul>
+
+  <h3>The big idea</h3>
+  <div class="box idea"><span class="tag">Picture it</span><p>A maximal consistent tableau is a <b>complete description of a possible world</b> that L cannot rule out: it says, for every formula, "true" or "false", without contradicting L. The canonical model puts all these descriptions together as its worlds. Then a formula is true at a world exactly when that world's description says so.</p></div>
+  <p>Completeness in contrapositive form: if L does not prove φ, find a countermodel. The canonical model provides one for <b>every</b> non-theorem at once.</p>
+
+  <h3>The construction, step by step</h3>
+  <div class="box stmt"><span class="tag">Lindenbaum's lemma</span><p>Every L-consistent tableau can be extended to a maximal L-consistent tableau.</p>
+  <p class="proofidea">How: list all formulas φ₁, φ₂, …. Go through them one by one. Try putting φᵢ on the false side; if that would make the tableau inconsistent, put it on the true side. Consistency is kept at each step, and in the limit every formula is decided.</p></div>
+  <div class="box stmt"><span class="tag">Key lemma</span><p>Λ ⊢_L φ iff φ ∈ Γ for every maximal L-consistent (Γ, Δ) with Λ ⊆ Γ. In particular <b>φ ∈ L iff φ ∈ Γ for every maximal L-consistent (Γ, Δ)</b>.</p></div>
+  <p><b>Canonical frame.</b> W_L = all maximal L-consistent tableaux, and for t₁ = (Γ₁, Δ₁), t₂ = (Γ₂, Δ₂):</p>
+  <div class="fm">L ∈ ExtInt:  t₁ R_L t₂ iff Γ₁ ⊆ Γ₂  (iff Δ₁ ⊇ Δ₂)<br>L ∈ NExt K:  t₁ R_L t₂ iff {ψ : □ψ ∈ Γ₁} ⊆ Γ₂</div>
+  <div class="box idea"><span class="tag">Picture it · the modal R_L</span><p>World t₂ is reachable from t₁ exactly when everything t₁ calls <b>necessary</b> is <b>true</b> in t₂. It is the most natural definition you could write.</p></div>
+  <div class="box stmt"><span class="tag">Lemma</span><p>𝔉_L is a Hintikka system in Int (if L ∈ ExtInt) and in K (if L ∈ NExt K).</p></div>
+  <p><b>Canonical valuation</b> <m>V_L(p) = {(Γ, Δ) ∈ W_L : p ∈ Γ}</m>, and <m>𝔐_L = ⟨𝔉_L, V_L⟩</m> is the canonical model.</p>
+
+  <div class="box stmt"><span class="tag">Canonical model theorem (truth lemma)</span><p>For a consistent si-logic or normal modal logic L, every formula φ and every t = (Γ, Δ) in W_L:</p>
+  <p>(i) φ ∈ Γ ⇒ (𝔐_L, t) ⊨ φ &nbsp; (ii) φ ∈ Δ ⇒ (𝔐_L, t) ⊭ φ &nbsp; so (iii) <b>(𝔐_L, t) ⊨ φ iff φ ∈ Γ</b>.</p></div>
+  <div class="box stmt"><span class="tag">Theorem</span><p>Every L-consistent tableau is realized in 𝔐_L. In particular Λ ⊢_L φ iff every point of 𝔐_L satisfying Λ satisfies φ, and <b>φ ∈ L iff 𝔐_L ⊨ φ</b>.</p></div>
+
+  <h3>From the model to completeness</h3>
+  <ol class="steps">
+    <li>If φ ∉ L, some world of 𝔐_L makes φ false. So the frame 𝔉_L refutes every non-theorem.</li>
+    <li>If we also know <m>𝔉_L ⊨ L</m> (L is valid on its canonical frame), then L = Log 𝔉_L: L is complete for this one frame.</li>
+    <li>A logic with 𝔉_L ⊨ L is called <b>canonical</b>. Int and K are obviously canonical (every partial order validates Int; every frame validates K).</li>
+  </ol>
+  <div class="box stmt"><span class="tag">Theorem</span><p>Every canonical si-logic or normal modal logic is <b>strongly Kripke complete</b> (complete even with sets of assumptions).</p></div>
+  <div class="box trap"><span class="tag">Common confusion · model versus frame</span><p>"𝔐_L ⊨ L" (true in the one canonical model) is automatic from the truth lemma. "𝔉_L ⊨ L" (valid on the canonical frame under <b>every</b> valuation) is the extra thing you must prove. Canonical logics are exactly the ones where it holds.</p></div>
+
+  <h3>The recipe, shown on T</h3>
+  <div class="box exam"><span class="tag">Exam method · prove L is complete for the frames with property P</span>
+    <ol class="steps">
+      <li>Already known: L is sound for P-frames (L is valid on every P-frame).</li>
+      <li>Show the canonical frame 𝔉_L has property P.</li>
+      <li>Then 𝔉_L ⊨ L, so L is canonical and characterized by the P-frames.</li>
+    </ol>
+  </div>
+  <div class="box exam"><span class="tag">Worked example · T = K ⊕ □p → p: the canonical frame is reflexive</span>
+    <ol class="steps">
+      <li>Suppose some t = (Γ, Δ) in W_T has not t R_T t.</li>
+      <li>By the definition of R_T, some ψ has □ψ ∈ Γ but ψ ∉ Γ (so ψ ∈ Δ).</li>
+      <li>□ψ → ψ is an instance of the axiom, so it is in T, hence in Γ (maximal consistent sets contain the logic).</li>
+      <li>Γ contains □ψ and □ψ → ψ and is closed under MP, so ψ ∈ Γ. Contradiction with ψ ∈ Δ.</li>
+      <li>So 𝔉_T is reflexive. <b>Corollary:</b> T is complete w.r.t. reflexive frames, and T is canonical.</li>
+    </ol>
+  </div>
+  <p>The same style of argument shows: if □p → □□p ∈ L, 𝔉_L is transitive (□ψ ∈ Γ₁ gives □□ψ ∈ Γ₁, so □ψ ∈ Γ₂, so ψ ∈ Γ₃).</p>
+  <div class="box stmt"><span class="tag">General theorem and corollaries</span>
+    <p>Every logic in ExtInt or NExt K axiomatized by formulas of the kind seen in lecture 21 is canonical, and its canonical frame satisfies the first-order condition matching its axioms. Hence:</p>
+    <ul>
+      <li>K4 is characterized by transitive frames.</li>
+      <li>S4 by quasi-order frames.</li>
+      <li>S5 by frames with universal accessibility relation.</li>
+      <li>D by serial frames.</li>
+      <li>S4.3 by connected quasi-orders, and also by linear partial orders.</li>
+      <li>S5 is <b>locally tabular</b> (for each n, only finitely many formulas in n variables up to equivalence) and is characterized by <b>finite</b> universal frames.</li>
+    </ul>
+  </div>
+
+  <div class="selfcheck">
+    <h3>Self-check</h3>
+    <details class="q"><summary>What are the worlds of the canonical model?</summary><p>All maximal L-consistent tableaux (Γ, Δ): complete, consistent descriptions of a world.</p></details>
+    <details class="q"><summary>State the truth lemma in one line.</summary><p>A formula is true at a world of 𝔐_L exactly when it is in that world's Γ.</p></details>
+    <details class="q"><summary>What does "L is canonical" mean?</summary><p>L is valid on its own canonical frame 𝔉_L. Then L is complete (even strongly).</p></details>
+    <details class="q"><summary>To prove S4 complete for quasi-orders, what do you show?</summary><p>That 𝔉_S4 is reflexive (from □p→p) and transitive (from □p→□□p).</p></details>
+  </div>
+</section>
+
+<section class="chapter" id="cheat">
+  <div class="eyebrow">Last-minute revision</div>
+  <h2>Cheat sheet</h2>
+  <div class="grid2">
+    <div class="card">
+      <h4>Truth at a point x</h4>
+      <p><b>Both:</b> p iff x ∈ V(p); ⊥ never; ∧, ∨ at x.</p>
+      <p><b>Int:</b> ψ → χ iff every y ≥ x with ψ has χ. ¬ψ iff no y ≥ x has ψ. R partial order, V upward closed, persistence.</p>
+      <p><b>Modal:</b> → and ¬ classical at x. □ψ: all successors. ◇ψ: some successor. R anything, V anything.</p>
+      <p>Dead end: □φ always true, ◇φ always false.</p>
+    </div>
+    <div class="card">
+      <h4>Validity vocabulary</h4>
+      <p><b>x ⊨ φ</b>: true at x in a model. <b>𝔐 ⊨ φ</b>: true at all points. <b>𝔉 ⊨ φ</b>: true at all points under <b>all</b> valuations.</p>
+      <p>To refute on a frame: pick one valuation. To prove valid: handle any valuation.</p>
+      <p><b>⊨</b> = truth. <b>⊢</b> = proof. Completeness: they agree.</p>
+    </div>
+    <div class="card">
+      <h4>Frame conditions</h4>
+      <p>□p → p : reflexive</p>
+      <p>□p → □□p : transitive</p>
+      <p>p → □◇p : symmetric</p>
+      <p>□p → ◇p : serial</p>
+      <p>◇□p → □p : Euclidean</p>
+      <p>◇□p → □◇p : strongly directed</p>
+      <p>□(□p→q) ∨ □(□q→p) : strongly connected</p>
+      <p>◇ᵏ□ˡp → □ᵐ◇ⁿp : xRᵏy ∧ xRᵐz ⇒ ∃u (yRˡu ∧ zRⁿu)</p>
+      <p><b>Int:</b> (p→q)∨(q→p) strongly connected; ¬p∨¬¬p strongly directed; bdₙ depth ≤ n.</p>
+    </div>
+    <div class="card">
+      <h4>Correspondence proof in 2 halves</h4>
+      <p>1. P ⇒ valid: assume φ false at x, unfold, contradict P.</p>
+      <p>2. valid ⇒ P: assume ¬P, name bad points, choose V(p):</p>
+      <p>□ on the left → V(p) = R(x) or W∖{x}.<br>bare p / ◇ on the right → V(p) = {x}.<br>Geach → V(p) = {u : yRˡu}.</p>
+    </div>
+    <div class="card">
+      <h4>Logics</h4>
+      <p>K: all frames. D = K⊕□p→◇p: serial. T = K⊕□p→p: reflexive. K4 = K⊕□p→□□p: transitive. S4 = T⊕tra: quasi-orders. S5 = S4⊕p→□◇p: universal / equivalence.</p>
+      <p>K ⊂ D ⊂ T ⊂ S4 ⊂ S5, K ⊂ K4 ⊂ S4.</p>
+      <p>More axioms: bigger logic, fewer frames.</p>
+    </div>
+    <div class="card">
+      <h4>Calculi</h4>
+      <p>CL: A1 to A10 + MP, Subst. Int: A1 to A9. K: A1 to A10 + A11 □(p₀→p₁)→(□p₀→□p₁) + MP, Subst, RN.</p>
+      <p>RN only on theorems. Derived: ⊢ φ→ψ ⇒ ⊢ □φ→□ψ. □ distributes over ∧, not ∨.</p>
+      <p>Deduction theorem: Γ, ψ ⊢ φ iff Γ ⊢ ψ → φ.</p>
+    </div>
+    <div class="card">
+      <h4>Truth-preserving operations</h4>
+      <p><b>Generated subframe</b> (upward closed part): 𝔉 ⊨ φ ⇒ 𝔊 ⊨ φ.</p>
+      <p><b>Reduction</b> f onto, R1 forth xRy ⇒ f(x)Sf(y), R2 back f(x)Sv ⇒ ∃z (xRz, f(z)=v): 𝔉 ⊨ φ ⇒ 𝔊 ⊨ φ. Reflexive never maps to irreflexive.</p>
+      <p><b>Disjoint union</b>: valid iff valid in every piece.</p>
+      <p>Anything valid somewhere is valid in ∘ or •.</p>
+    </div>
+    <div class="card">
+      <h4>Clusters and skeleton</h4>
+      <p>Transitive frames only. x ∼ y iff x = y or (xRy and yRx).</p>
+      <p>Degenerate (1 irreflexive), simple (1 reflexive), proper (≥ 2).</p>
+      <p>Skeleton ρ𝔉: clusters, C(x) ρR C(y) iff xRy. Antisymmetric; a partial order if R is a quasi-order.</p>
+      <p>Points in a cluster agree on all □ and ◇ formulas.</p>
+    </div>
+    <div class="card">
+      <h4>Tableaux</h4>
+      <p>(Γ | Δ) = (true | false). Closed: same formula both sides or ⊥ left.</p>
+      <p><b>Classical:</b> S1 to S6 at one point.</p>
+      <p><b>Int:</b> S1 to S5 inside; → or ¬ on the right opens a new later point; copy all of Γ upward.</p>
+      <p><b>Modal:</b> S1 to S6 inside; □ on the right opens a successor with its body on the right; □ on the left copies its body to the left of every successor.</p>
+      <p>Bound: at most 2<sup>|Sub φ|</sup> points (fmp).</p>
+    </div>
+    <div class="card">
+      <h4>Classes of logics</h4>
+      <p>si-logic: Int ⊆ L, MP, Subst. Int ⊆ L ⊆ Cl if consistent. Cl = Int + p∨¬p, For = Int + p.</p>
+      <p>Sum: pool axioms. Intersection: Int + {φᵢ ∨̲ ψⱼ} (rename variables apart).</p>
+      <p>Quasi-normal: K ⊆ L, MP, Subst (K + Γ). Normal: also RN (K ⊕ Γ).</p>
+    </div>
+    <div class="card">
+      <h4>Canonical models</h4>
+      <p>Worlds: maximal L-consistent (Γ, Δ). Int: t₁Rt₂ iff Γ₁ ⊆ Γ₂. Modal: iff {ψ : □ψ ∈ Γ₁} ⊆ Γ₂. V(p) = {t : p ∈ Γ}.</p>
+      <p>Truth lemma: t ⊨ φ iff φ ∈ Γ. φ ∈ L iff 𝔐_L ⊨ φ.</p>
+      <p>Canonical: 𝔉_L ⊨ L ⇒ strongly complete. Show 𝔉_L has the frame property.</p>
+    </div>
+    <div class="card">
+      <h4>Exam reflexes</h4>
+      <p>Clusters asked? Check transitivity first.</p>
+      <p>Int frame given without closure? Add reflexive and transitive pairs and say so.</p>
+      <p>Countermodel built? Verify it at the root in two lines.</p>
+      <p>"iff" question? Two halves, label them.</p>
+    </div>
+  </div>
+</section>
+</main>
+</div>
+<script>
+(function(){
+  /* Diagram specs. n: id -> [x, y, type, name, trueText, falseText]
+     type: r = reflexive (hollow), i = irreflexive (filled), n = plain small dot, b = text box
+     e: arrows [from, to, optional label, optional "dash"]; c: cluster ovals [cx, cy, rx, ry];
+     s: dashed segments [x1, y1, x2, y2] (e.g. "continues forever") */
+  var D = {
+    legend:{w:380,h:90,n:{x:[70,50,'r','x','p',''],y:[200,50,'i','y','','q'],c1:[295,50,'r',''],c2:[335,50,'r','']},e:[['x','y','xRy']],c:[[315,50,42,22]]},
+    int2:{w:230,h:150,n:{a:[115,120,'r','a','¬¬p','p, ¬p, p∨¬p'],b:[115,35,'r','b','p, p∨¬p','']},e:[['a','b']]},
+    redA:{w:180,h:155,n:{r:[90,130,'r','r'],a1:[45,80,'r','a₁'],a2:[45,30,'r','a₂'],b1:[135,80,'r','b₁'],b2:[135,30,'r','b₂']},e:[['r','a1'],['a1','a2'],['r','b1'],['b1','b2']]},
+    redB:{w:150,h:155,n:{r:[75,130,'r',''],m1:[30,80,'r',''],m2:[120,80,'r',''],t:[75,30,'r','']},e:[['r','m1'],['r','m2'],['m1','t'],['m2','t']]},
+    redG:{w:130,h:155,n:{g:[65,130,'r',''],m:[65,80,'r','m'],t1:[25,30,'r',''],t2:[105,30,'r','']},e:[['g','m'],['m','t1'],['m','t2']]},
+    dummett:{w:260,h:150,n:{t0:[130,120,'r','t₀','','p→q, q→p'],t1:[60,40,'r','t₁','p','q'],t2:[200,40,'r','t₂','q','p']},e:[['t0','t1'],['t0','t2']]},
+    e17a:{w:220,h:80,n:{a:[90,45,'i','a','□p','p, ◇p']}},
+    e17b:{w:290,h:80,n:{a:[150,45,'r','a','□p→p, □(□p→p)','p, □p']}},
+    e17c:{w:200,h:180,n:{a:[90,160,'i','a','','p, □p'],b:[90,105,'i','b','','p, □p'],c:[90,50,'i','c','','p, □p']},e:[['a','b'],['b','c']],s:[[90,40,90,8]]},
+    e17d:{w:220,h:180,n:{a:[100,155,'i','a','p, □p','□□p'],b:[100,95,'i','b','p','□p'],c:[100,35,'i','c','','p']},e:[['a','b'],['b','c']]},
+    e17e:{w:220,h:180,n:{a:[100,155,'r','a','p, □p','□□p'],b:[100,95,'r','b','p','□p'],c:[100,35,'r','c','','p']},e:[['a','b'],['b','c']]},
+    'cl-deg':{w:110,h:70,n:{x:[55,38,'i','']}},
+    'cl-simp':{w:110,h:70,n:{x:[55,38,'r','']}},
+    'cl-prop':{w:130,h:70,n:{x:[40,38,'r',''],y:[90,38,'r','']},c:[[65,38,48,22]]},
+    skel1:{w:230,h:220,n:{p0:[115,195,'i','0'],p1:[75,140,'r','1'],p2:[155,140,'r','2'],p3:[75,88,'r','3'],p4:[155,88,'r','4'],p5:[115,35,'r','5']},e:[['p0','p1'],['p0','p2'],['p1','p3'],['p2','p4'],['p3','p5'],['p4','p5']],c:[[115,140,66,22],[115,88,66,22]]},
+    skel2:{w:150,h:220,n:{a:[60,195,'i','{0}'],b:[60,140,'r','{1,2}'],c:[60,88,'r','{3,4}'],d:[60,35,'r','{5}']},e:[['a','b'],['b','c'],['c','d']]},
+    mck:{w:320,h:150,n:{a1:[160,40,'r','a₁','p, ◇p, □◇p','□p, ◇□p'],a2:[160,110,'r','a₂','◇p, □◇p','p, □p, ◇□p']},c:[[160,75,24,60]]},
+    nat:{w:130,h:175,n:{n0:[60,155,'i','0'],n1:[60,105,'i','1'],n2:[60,55,'i','2']},e:[['n0','n1'],['n1','n2']],s:[[60,45,60,10]]},
+    nat2:{w:130,h:110,n:{a:[40,60,'r','0'],b:[90,60,'r','1']},c:[[65,60,48,24]]},
+    nat3:{w:100,h:110,n:{a:[50,60,'r','0']}},
+    sc1:{w:270,h:150,n:{t0:[135,125,'i','t₀','','sc'],t1:[65,40,'i','t₁','□p','q'],t2:[205,40,'i','t₂','□q','p']},e:[['t0','t1'],['t0','t2']]},
+    sc2:{w:220,h:150,n:{t0:[110,125,'i','t₀','','sc'],t:[110,40,'i','t','□p, □q','p, q']},e:[['t0','t']]},
+    grz1:{w:220,h:80,n:{t0:[100,45,'i','t₀','','p, grz']}},
+    grz2:{w:230,h:190,n:{t0:[115,165,'r','t₀','','p, □(p→□p)'],t1:[115,100,'r','t₁','p','□p'],t2:[115,35,'r','t₂','','p']},e:[['t0','t1'],['t1','t2']]},
+    symcm:{w:230,h:145,n:{x:[115,115,'n','x','p','□◇p'],y:[115,35,'n','y','','p, ◇p']},e:[['x','y','xRy']]},
+    geach:{w:240,h:210,n:{x:[120,185,'n','x'],y:[45,108,'n','y'],z:[195,108,'n','z'],u:[120,30,'n','u']},e:[['x','y','k steps','dash'],['x','z','m steps','dash'],['y','u','l steps','dash'],['z','u','n steps','dash']]},
+    lattice:{w:300,h:240,n:{K:[150,215,'b','K'],D:[70,165,'b','D'],T:[70,115,'b','T'],K4:[230,140,'b','K4'],S4:[150,70,'b','S4'],S5:[150,22,'b','S5']},e:[['K','D'],['D','T'],['T','S4'],['K','K4'],['K4','S4'],['S4','S5']]},
+    qn:{w:280,h:150,n:{x:[140,115,'i','x','□⊥ → p','□(□⊥ → p)'],y:[140,40,'i','y','□⊥','p, □⊥ → p']},e:[['x','y']]}
+  };
+  var NS='http://www.w3.org/2000/svg', uid=0;
+  function el(tag, attrs, parent, text){
+    var e=document.createElementNS(NS, tag);
+    for (var k in attrs) e.setAttribute(k, attrs[k]);
+    if (text!=null) e.textContent=text;
+    if (parent) parent.appendChild(e);
+    return e;
+  }
+  function radius(t){ return t==='b'?15:(t==='n'?4:7); }
+  function draw(spec, label){
+    var id='ah'+(uid++);
+    var svg=el('svg',{viewBox:'0 0 '+spec.w+' '+spec.h,width:spec.w,height:spec.h,role:'img','aria-label':label||'Kripke frame diagram'});
+    var defs=el('defs',{},svg);
+    var mk=el('marker',{id:id,viewBox:'0 0 10 10',refX:'9',refY:'5',markerWidth:'7',markerHeight:'7',orient:'auto-start-reverse'},defs);
+    el('path',{d:'M0,0 L10,5 L0,10 z','class':'arrowhead'},mk);
+    (spec.c||[]).forEach(function(c){ el('ellipse',{cx:c[0],cy:c[1],rx:c[2],ry:c[3],'class':'clu'},svg); });
+    (spec.s||[]).forEach(function(s){ el('line',{x1:s[0],y1:s[1],x2:s[2],y2:s[3],'class':'edge dash'},svg); });
+    (spec.e||[]).forEach(function(ed){
+      var a=spec.n[ed[0]], b=spec.n[ed[1]];
+      var dx=b[0]-a[0], dy=b[1]-a[1], L=Math.sqrt(dx*dx+dy*dy)||1;
+      var ra=radius(a[2])+3, rb=radius(b[2])+4;
+      var x1=a[0]+dx/L*ra, y1=a[1]+dy/L*ra, x2=b[0]-dx/L*rb, y2=b[1]-dy/L*rb;
+      el('line',{x1:x1,y1:y1,x2:x2,y2:y2,'class':'edge'+(ed[3]==='dash'?' dash':''),'marker-end':'url(#'+id+')'},svg);
+      if (ed[2]){
+        var mx=(a[0]+b[0])/2, my=(a[1]+b[1])/2, side=(dx>=0?1:-1);
+        el('text',{x:mx+side*8,y:my-4,'class':'nm','text-anchor':side>0?'start':'end'},svg,ed[2]);
+      }
+    });
+    Object.keys(spec.n).forEach(function(k){
+      var p=spec.n[k], x=p[0], y=p[1], t=p[2];
+      if (t==='b'){
+        el('rect',{x:x-24,y:y-13,width:48,height:26,rx:6,'class':'pt-r'},svg);
+        el('text',{x:x,y:y+5,'text-anchor':'middle','font-size':'14'},svg,p[3]);
+        return;
+      }
+      el('circle',{cx:x,cy:y,r:radius(t),'class':t==='r'?'pt-r':'pt-i'},svg);
+      if (p[3]) el('text',{x:x+9,y:y-9,'class':'nm'},svg,p[3]);
+      if (p[4]) el('text',{x:x-13,y:y+5,'class':'tt','text-anchor':'end'},svg,p[4]);
+      if (p[5]) el('text',{x:x+13,y:y+5+(p[3]?6:0),'class':'ff'},svg,p[5]);
+    });
+    return svg;
+  }
+  document.querySelectorAll('figure.kd[data-d]').forEach(function(f){
+    var spec=D[f.getAttribute('data-d')]; if(!spec) return;
+    var cap=f.querySelector('figcaption');
+    f.insertBefore(draw(spec, cap?cap.textContent:''), cap);
+  });
+
+  /* theme toggle: remembers the viewer's choice when storage is available */
+  var root=document.documentElement, btn=document.getElementById('themebtn');
+  function current(){ var t=root.getAttribute('data-theme'); if(t) return t; return window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'; }
+  function label(){ btn.textContent = current()==='dark' ? 'Light mode' : 'Dark mode'; }
+  try{ var saved=localStorage.getItem('alcs-theme'); if(saved==='dark'||saved==='light') root.setAttribute('data-theme',saved); }catch(e){}
+  label();
+  btn.addEventListener('click',function(){
+    var next=current()==='dark'?'light':'dark';
+    root.setAttribute('data-theme',next); label();
+    try{ localStorage.setItem('alcs-theme',next); }catch(e){}
+  });
+  if (window.matchMedia) { try{ matchMedia('(prefers-color-scheme: dark)').addEventListener('change',label); }catch(e){} }
+
+  /* collapse the chapter list on phones; highlight the chapter in view */
+  var det=document.getElementById('tocdet');
+  if (window.innerWidth<=900 && det) det.removeAttribute('open');
+  var links=[].slice.call(document.querySelectorAll('.toc a'));
+  var byId={}; links.forEach(function(a){ byId[a.getAttribute('href').slice(1)]=a; });
+  if ('IntersectionObserver' in window){
+    var obs=new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if(en.isIntersecting){ links.forEach(function(a){a.classList.remove('on');}); var a=byId[en.target.id]; if(a) a.classList.add('on'); }
+      });
+    },{rootMargin:'-20% 0px -70% 0px'});
+    document.querySelectorAll('section.chapter, h3[id]').forEach(function(s){ if(byId[s.id]) obs.observe(s); });
+  }
+  links.forEach(function(a){ a.addEventListener('click',function(){ if(window.innerWidth<=900 && det) det.removeAttribute('open'); }); });
+})();
+</script>
