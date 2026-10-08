@@ -1,0 +1,360 @@
+<title>Reduction Gluer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* Layout concept: a workbench. Left = the original frame you click on, right = the glued result, checks and arrow bookkeeping underneath. */
+:root{
+  --bg:#F2F4F7; --surface:#FFFFFF; --ink:#13202C; --muted:#56657A; --line:#D5DBE4; --accent:#2554C7;
+  --ok:#14795A; --okbg:#E1F4EC; --bad:#B3261E; --badbg:#FBE8E6; --chip:#EAEEF4;
+  --g0:#2554C7; --g1:#B85A00; --g2:#14795A; --g3:#A3217A; --g4:#6240C0; --on-g:#FFFFFF;
+  --f-display:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif;
+  --f-body:"IBM Plex Sans","Segoe UI",system-ui,sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0F151C; --surface:#17202A; --ink:#E6ECF3; --muted:#97A6B8; --line:#2A3644; --accent:#7FA6FF;
+    --ok:#4FD39B; --okbg:#10302A; --bad:#FF8A80; --badbg:#3A1B1A; --chip:#212C39;
+    --g0:#7FA6FF; --g1:#FFA24D; --g2:#4FD39B; --g3:#F27BC0; --g4:#A98BFF; --on-g:#0B1016;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0F151C; --surface:#17202A; --ink:#E6ECF3; --muted:#97A6B8; --line:#2A3644; --accent:#7FA6FF;
+  --ok:#4FD39B; --okbg:#10302A; --bad:#FF8A80; --badbg:#3A1B1A; --chip:#212C39;
+  --g0:#7FA6FF; --g1:#FFA24D; --g2:#4FD39B; --g3:#F27BC0; --g4:#A98BFF; --on-g:#0B1016;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.55;padding-inline:16px;padding-block:20px 56px}
+.wrap{max-width:1040px;margin-inline:auto;display:flex;flex-direction:column;gap:28px}
+header{display:flex;justify-content:space-between;align-items:flex-start;gap:16px}
+h1{font-family:var(--f-display);font-weight:700;font-size:clamp(1.9rem,5vw,2.8rem);line-height:1.05;margin:0;text-wrap:balance}
+h2{font-family:var(--f-display);font-weight:700;font-size:1.4rem;margin:0 0 8px;text-wrap:balance}
+h3{font-family:var(--f-display);font-weight:500;font-size:1.05rem;margin:0 0 6px}
+p{margin:0 0 10px;max-width:68ch}
+.sub{color:var(--muted);max-width:60ch;margin-top:8px}
+.mono{font-family:var(--f-mono);font-size:.92em}
+button{font:inherit;color:inherit}
+.btn{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:7px 12px;cursor:pointer;font-size:.9rem}
+.btn:hover{border-color:var(--accent)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn:focus-visible,.chip:focus-visible,[data-x]:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+section{display:flex;flex-direction:column;gap:6px}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.two>*{min-width:0}
+.scroll{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:.92rem}
+th,td{text-align:left;padding:7px 10px;border-bottom:1px solid var(--line);vertical-align:top;white-space:nowrap}
+th{font-weight:600;color:var(--muted);font-size:.78rem;letter-spacing:.06em;text-transform:uppercase}
+td.m{font-family:var(--f-mono);font-size:.88rem}
+.yes{color:var(--ok);font-weight:600}.no{color:var(--bad);font-weight:600}
+tr.badrow td{background:var(--badbg)}
+.tag{display:inline-block;font-family:var(--f-mono);font-size:.8rem;background:var(--chip);border-radius:4px;padding:1px 6px}
+.cap{font-size:.78rem;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:6px}
+svg{display:block;width:100%;height:auto;max-height:340px}
+svg text{font-family:var(--f-mono);font-weight:600}
+.edge{stroke:var(--muted);stroke-width:2.2}
+.lbl{fill:var(--on-g);font-size:16px;text-anchor:middle;dominant-baseline:central;pointer-events:none}
+[data-x]{cursor:pointer}
+.ring{fill:none;stroke:var(--ink);stroke-width:2.5;stroke-dasharray:4 3}
+.hint{color:var(--muted);font-size:.9rem;margin-top:8px}
+.controls{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.verdict{border-radius:10px;padding:14px 16px;border:1px solid}
+.verdict.ok{background:var(--okbg);border-color:var(--ok)}
+.verdict.bad{background:var(--badbg);border-color:var(--bad)}
+.verdict p{margin:6px 0 0}
+.pill{display:inline-block;font-weight:600;font-size:.82rem;letter-spacing:.05em;text-transform:uppercase;padding:2px 10px;border-radius:20px;color:var(--bg);background:var(--ok)}
+.verdict.bad .pill{background:var(--bad)}
+.gallery{display:flex;flex-direction:column;gap:14px}
+.grow{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.gname{font-family:var(--f-display);font-weight:500;min-width:150px}
+.chip{background:var(--chip);border:1px solid transparent;border-radius:6px;padding:6px 10px;cursor:pointer;font-family:var(--f-mono);font-size:.88rem}
+.chip:hover{border-color:var(--accent)}
+.chip.on{border-color:var(--accent);background:var(--surface);box-shadow:0 0 0 2px var(--accent)}
+.chip.fail{color:var(--bad)}
+ol.rec{margin:0;padding-left:1.3rem;display:flex;flex-direction:column;gap:10px;max-width:72ch}
+.sets{font-family:var(--f-mono);font-size:.9rem}
+@media (max-width:760px){.two{grid-template-columns:1fr}.gname{min-width:100%}}
+@media (prefers-reduced-motion:no-preference){.node-c{transition:fill .15s}}
+</style>
+
+<div class="wrap">
+<header>
+  <div>
+    <h1>Reduction Gluer</h1>
+    <p class="sub">Second insem, Question 1. Glue points of the frame together yourself and the page checks, point by point, whether the result is a reduction.</p>
+  </div>
+  <button class="btn" id="themeBtn" type="button">Dark / Light</button>
+</header>
+
+<section>
+  <h2>The frame you are gluing</h2>
+  <div class="panel">
+    <p>The frame has five points a, b, c, d, e. Every point sees itself. The printed arrows are a to b, a to c, b to d, c to d, b to e. That relation is not transitive (a sees b and b sees d, yet (a,d) is missing), and an intuitionistic frame must be a partial order, so we add the missing arrows (a,d) and (a,e). This is the one assumption to write in your exam answer.</p>
+    <div class="scroll"><table>
+      <tr><th>Point</th><th>What it sees, x↑ (itself included)</th><th>Kind</th></tr>
+      <tr><td class="m">a</td><td class="m">{a, b, c, d, e}</td><td>root, sees everything</td></tr>
+      <tr><td class="m">b</td><td class="m">{b, d, e}</td><td></td></tr>
+      <tr><td class="m">c</td><td class="m">{c, d}</td><td></td></tr>
+      <tr><td class="m">d</td><td class="m">{d}</td><td>final point (sees only itself)</td></tr>
+      <tr><td class="m">e</td><td class="m">{e}</td><td>final point (sees only itself)</td></tr>
+    </table></div>
+  </div>
+</section>
+
+<section>
+  <h2>The one rule</h2>
+  <p>Gluing points means they turn into a single point. A single point has a single future, so only points with the same future can be glued. To test it: write down x↑, rename every point in it to the name of its glued group, and compare that with what the glued point of x sees. The two lists must be identical, for every x.</p>
+  <p>"Glued point sees something x does not" breaks rule R2 (never gain a view). "x sees something the glued point does not" breaks rule R1 (never lose a view). Matching lists mean both rules hold. The glued frame must also stay a partial order: two different glued points may not see each other.</p>
+</section>
+
+<section>
+  <h2>Try it</h2>
+  <p>Click a point, then click a second point to glue them. Click "Split out" to pull the selected point away from its group. Colors follow the first letter of each group. Or load a ready-made gluing from the lists further down.</p>
+  <div class="two">
+    <div class="panel">
+      <div class="cap">Original frame (lines go upward, every point also loops to itself)</div>
+      <div id="orig"></div>
+      <div class="controls">
+        <button class="btn" id="split" type="button" disabled>Split out selected</button>
+        <button class="btn" id="reset" type="button">Reset: all separate</button>
+      </div>
+      <div class="hint" id="selhint">Nothing selected.</div>
+    </div>
+    <div class="panel">
+      <div class="cap">Glued frame (what the groups turn into)</div>
+      <div id="quot"></div>
+      <div class="hint" id="qhint"></div>
+    </div>
+  </div>
+  <div id="verdict" class="verdict ok" role="status" aria-live="polite"></div>
+</section>
+
+<section>
+  <h2>Check, point by point</h2>
+  <div class="panel scroll"><table id="checks"></table></div>
+</section>
+
+<section>
+  <h2>What happens to every arrow</h2>
+  <p>Each point is replaced by the name of its group. An arrow between two points of the same group becomes the loop of the glued point. Everything else becomes an arrow between group names, and duplicates collapse into one.</p>
+  <div class="panel">
+    <div class="scroll"><table id="arrows"></table></div>
+    <p class="hint" id="arrowsum"></p>
+  </div>
+</section>
+
+<section>
+  <h2>All 12 reductions</h2>
+  <p>Of the 52 ways to split five points into groups, exactly 12 are reductions. They give 7 different shapes. Click any one to load it above.</p>
+  <div class="gallery panel" id="gallery"></div>
+</section>
+
+<section>
+  <h2>Gluings that fail</h2>
+  <p>Load each one and read the red message. They are the typical mistakes.</p>
+  <div class="panel"><div class="grow" id="failgal"></div></div>
+</section>
+
+<section>
+  <h2>Exam recipe for any "find all reducts" question</h2>
+  <div class="panel">
+    <ol class="rec">
+      <li>Write the relation as a list of up-sets x↑. If the given relation is not transitive, close it and say so.</li>
+      <li>Mark the final points (x↑ has one element) and the root.</li>
+      <li>Decide from the top down. First choose which final points are glued, because everything below is judged by the groups above it. Here that is two cases: d and e glued, or not.</li>
+      <li>For each lower point, compare futures after renaming. Two points can join only if their renamed up-sets are the same, which may force other gluings first (a and b together force c and d together).</li>
+      <li>Write each surviving grouping, then draw it: one node per group, an arrow when any member sees any member, then delete loops and implied arrows.</li>
+      <li>Collect identical drawings. State the final list and one line of reason for the ones that fail.</li>
+    </ol>
+  </div>
+</section>
+</div>
+
+<script>
+const P=[...'abcde'];
+const UP={a:'abcde',b:'bde',c:'cd',d:'d',e:'e'};
+const POS={a:[180,255],b:[110,150],c:[250,150],d:[180,45],e:[60,45]};
+const COVER=[['a','b'],['a','c'],['b','d'],['b','e'],['c','d']];
+const ARROWS=[];P.forEach(x=>[...UP[x]].forEach(y=>{if(x!==y)ARROWS.push([x,y]);}));
+const TYPE={'1':'single point','1,2':'2-element chain','1,2,3':'3-element chain','1,2,2,4':'diamond','1,1,3':'fork (V shape)','1,1,3,4':'chain, then fork','1,1,2,3,5':'the original frame itself'};
+const VALID=[
+ ['the original frame itself',['a|b|c|d|e']],
+ ['chain, then fork',['a|b|cd|e']],
+ ['fork (V shape)',['ab|cd|e']],
+ ['diamond',['a|b|c|de']],
+ ['3-element chain',['a|bc|de','a|b|cde','a|c|bde']],
+ ['2-element chain',['abc|de','ab|cde','ac|bde','a|bcde']],
+ ['single point',['abcde']]
+];
+const FAIL=['a|bc|d|e','ab|c|d|e','ac|b|d|e','a|b|ce|d','a|bd|c|e'];
+let grp={a:0,b:1,c:2,d:3,e:4},sel=null,nextId=5;
+const $=s=>document.querySelector(s);
+const fmt=a=>'{'+a.join(', ')+'}';
+const q=s=>s.map(n=>'"'+n+'"').join(', ');
+const col=n=>'var(--g'+P.indexOf(n[0])+')';
+
+function parse(str){const g={};str.split('|').forEach((grpStr,i)=>[...grpStr].forEach(x=>g[x]=i));return g;}
+
+function analyze(g){
+  const gm=new Map();
+  P.forEach(x=>{if(!gm.has(g[x]))gm.set(g[x],[]);gm.get(g[x]).push(x);});
+  const classes=[...gm.values()].map(m=>({members:m,name:m.join(''),ci:P.indexOf(m[0])})).sort((p,r)=>p.ci-r.ci);
+  const classOf={},ord={};
+  classes.forEach((c,i)=>{ord[c.name]=i;c.members.forEach(x=>classOf[x]=c.name);});
+  const srt=a=>[...new Set(a)].sort((p,r)=>ord[p]-ord[r]);
+  const img={};P.forEach(x=>img[x]=srt([...UP[x]].map(y=>classOf[y])));
+  const sees={};classes.forEach(c=>sees[c.name]=srt(c.members.flatMap(x=>img[x])));
+  const rows=P.map(x=>({x,up:[...UP[x]],img:img[x],sees:sees[classOf[x]],ok:img[x].join()===sees[classOf[x]].join()}));
+  const key=classes.map(c=>c.name).join('|');
+  let valid=true,reason='';
+  for(const c of classes){
+    for(let i=0;i<c.members.length&&valid;i++)for(let j=i+1;j<c.members.length&&valid;j++){
+      const x=c.members[i],y=c.members[j];
+      const ox=img[x].filter(n=>!img[y].includes(n)),oy=img[y].filter(n=>!img[x].includes(n));
+      if(ox.length||oy.length){
+        valid=false;
+        const parts=[];
+        if(ox.length)parts.push(x+' reaches '+q(ox)+' but '+y+' does not');
+        if(oy.length)parts.push(y+' reaches '+q(oy)+' but '+x+' does not');
+        reason='You glued '+x+' and '+y+' into one point "'+c.name+'", but '+parts.join(', and ')+'. One point cannot have two different futures, so this gluing breaks R1/R2.';
+      }
+    }
+    if(!valid)break;
+  }
+  if(valid){
+    outer:for(const c of classes)for(const d of classes){
+      if(c!==d&&sees[c.name].includes(d.name)&&sees[d.name].includes(c.name)){
+        valid=false;reason='"'+c.name+'" and "'+d.name+'" would see each other. That makes a cluster, and an intuitionistic frame must be a partial order.';break outer;
+      }
+    }
+  }
+  let qd=null;
+  if(valid){
+    const names=classes.map(c=>c.name);
+    const lt=(c,d)=>c!==d&&sees[c].includes(d);
+    const lvl={};
+    const L=n=>{if(lvl[n]!==undefined)return lvl[n];const pr=names.filter(m=>lt(m,n));return lvl[n]=pr.length?1+Math.max(...pr.map(L)):0;};
+    names.forEach(L);
+    const maxL=Math.max(...names.map(n=>lvl[n]));
+    const meanX=n=>{const m=classes.find(c=>c.name===n).members;return m.reduce((s,x)=>s+POS[x][0],0)/m.length;};
+    const pos={};
+    for(let l=0;l<=maxL;l++){
+      const row=names.filter(n=>lvl[n]===l).sort((p,r)=>meanX(p)-meanX(r));
+      row.forEach((n,i)=>pos[n]=[(i+1)*360/(row.length+1),maxL===0?150:255-l*(210/maxL)]);
+    }
+    const edges=[];
+    names.forEach(c=>names.forEach(d=>{if(lt(c,d)&&!names.some(m=>lt(c,m)&&lt(m,d)))edges.push([c,d]);}));
+    qd={pos,edges,sig:classes.map(c=>sees[c.name].length).sort((a,b)=>a-b).join(',')};
+  }
+  return{classes,classOf,rows,valid,reason,key,qd};
+}
+
+function drawOrig(a){
+  let s='<svg viewBox="0 0 360 300" role="img" aria-label="Original frame, click a point to select it">';
+  COVER.forEach(([x,y])=>s+=`<line class="edge" x1="${POS[x][0]}" y1="${POS[x][1]}" x2="${POS[y][0]}" y2="${POS[y][1]}"/>`);
+  a.classes.forEach(c=>{
+    if(c.members.length>1){
+      const f=POS[c.members[0]];
+      c.members.slice(1).forEach(x=>s+=`<line x1="${f[0]}" y1="${f[1]}" x2="${POS[x][0]}" y2="${POS[x][1]}" stroke="${col(c.name)}" stroke-width="16" stroke-linecap="round" opacity=".38"/>`);
+    }
+  });
+  P.forEach(x=>{
+    const c=a.classOf[x],[px,py]=POS[x];
+    s+=`<g data-x="${x}" tabindex="0" role="button" aria-label="Point ${x}, in group ${c}">`;
+    if(sel===x)s+=`<circle class="ring" cx="${px}" cy="${py}" r="27"/>`;
+    s+=`<circle class="node-c" cx="${px}" cy="${py}" r="19" fill="${col(c)}"/><text class="lbl" x="${px}" y="${py}">${x}</text></g>`;
+  });
+  return s+'</svg>';
+}
+
+function drawQuot(a){
+  if(!a.valid)return '<svg viewBox="0 0 360 300" role="img" aria-label="No valid glued frame"><text x="180" y="150" text-anchor="middle" dominant-baseline="central" style="fill:var(--bad);font-size:15px">not a reduction, no frame to draw</text></svg>';
+  const d=a.qd;
+  let s='<svg viewBox="0 0 360 300" role="img" aria-label="Glued frame">';
+  d.edges.forEach(([c,e])=>s+=`<line class="edge" x1="${d.pos[c][0]}" y1="${d.pos[c][1]}" x2="${d.pos[e][0]}" y2="${d.pos[e][1]}"/>`);
+  a.classes.forEach(c=>{
+    const [px,py]=d.pos[c.name],w=28+11*c.name.length;
+    s+=`<rect x="${px-w/2}" y="${py-18}" width="${w}" height="36" rx="18" fill="${col(c.name)}"/><text class="lbl" x="${px}" y="${py}">${c.name}</text>`;
+  });
+  return s+'</svg>';
+}
+
+function render(){
+  const a=analyze(grp);
+  $('#orig').innerHTML=drawOrig(a);
+  $('#quot').innerHTML=drawQuot(a);
+  $('#selhint').textContent=sel?('Selected: '+sel+'. Click another point to glue it with '+sel+'.'):'Nothing selected.';
+  $('#split').disabled=!(sel&&a.classes.find(c=>c.name===a.classOf[sel]).members.length>1);
+  const n=a.classes.length;
+  $('#qhint').textContent=a.valid?(n+(n===1?' point':' points')+', every point also loops to itself. Lines go upward.'):'';
+  const v=$('#verdict');
+  if(a.valid){
+    v.className='verdict ok';
+    v.innerHTML='<span class="pill">Valid reduction</span><p>Every point passes the check. The glued frame is the <b>'+(TYPE[a.qd.sig]||'frame above')+'</b>'+(n===1?'':' with '+n+' points')+'.</p>';
+  }else{
+    v.className='verdict bad';
+    v.innerHTML='<span class="pill">Not a reduction</span><p>'+a.reason+'</p>';
+  }
+  let t='<tr><th>Point x</th><th>Sees, x↑</th><th>Renamed to groups</th><th>Glued point sees</th><th>Match</th></tr>';
+  a.rows.forEach(r=>{
+    t+=`<tr class="${r.ok?'':'badrow'}"><td class="m">${r.x} in "${a.classOf[r.x]}"</td><td class="m">${fmt(r.up)}</td><td class="m">${fmt(r.img)}</td><td class="m">${fmt(r.sees)}</td><td class="${r.ok?'yes':'no'}">${r.ok?'✓ same':'✗ differs'}</td></tr>`;
+  });
+  $('#checks').innerHTML=t;
+  let ar='<tr><th>Original arrow</th><th>Becomes</th></tr>';
+  const set=new Set();
+  ARROWS.forEach(([x,y])=>{
+    const fx=a.classOf[x],fy=a.classOf[y];
+    if(fx===fy)ar+=`<tr><td class="m">${x} → ${y}</td><td>both in "${fx}": becomes the loop</td></tr>`;
+    else{ar+=`<tr><td class="m">${x} → ${y}</td><td class="m">${fx} → ${fy}</td></tr>`;set.add(fx+' → '+fy);}
+  });
+  $('#arrows').innerHTML=ar;
+  $('#arrowsum').textContent=set.size?('Distinct arrows left between groups: '+[...set].join(',  ')+'. Loops are always there.'):'No arrows left between groups, only the loop.';
+  document.querySelectorAll('.chip').forEach(c=>{
+    const k=analyze(parse(c.dataset.p)).key;
+    c.classList.toggle('on',k===a.key);
+  });
+}
+
+function click(x){
+  if(sel===null){sel=x;}
+  else if(sel===x){sel=null;}
+  else{
+    const from=grp[x],to=grp[sel];
+    if(from!==to)P.forEach(p=>{if(grp[p]===from)grp[p]=to;});
+    sel=null;
+  }
+  render();
+}
+$('#orig').addEventListener('click',e=>{const g=e.target.closest('[data-x]');if(g)click(g.dataset.x);});
+$('#orig').addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){const g=e.target.closest('[data-x]');if(g){e.preventDefault();click(g.dataset.x);}}});
+$('#split').addEventListener('click',()=>{if(sel){grp[sel]=nextId++;sel=null;render();}});
+$('#reset').addEventListener('click',()=>{grp={a:0,b:1,c:2,d:3,e:4};sel=null;render();});
+
+function chip(p,fail){
+  const label=p.split('|').map(x=>x.length>1?'{'+[...x].join(',')+'}':x).join('  ');
+  const b=document.createElement('button');
+  b.type='button';b.className='chip'+(fail?' fail':'');b.dataset.p=p;b.textContent=label;
+  b.addEventListener('click',()=>{grp=parse(p);sel=null;render();$('#orig').scrollIntoView({block:'nearest',behavior:'smooth'});});
+  return b;
+}
+VALID.forEach(([name,list])=>{
+  const row=document.createElement('div');row.className='grow';
+  const n=document.createElement('div');n.className='gname';n.textContent=name;row.appendChild(n);
+  list.forEach(p=>row.appendChild(chip(p,false)));
+  $('#gallery').appendChild(row);
+});
+FAIL.forEach(p=>$('#failgal').appendChild(chip(p,true)));
+
+$('#themeBtn').addEventListener('click',()=>{
+  const r=document.documentElement;
+  const dark=r.dataset.theme?r.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;
+  r.dataset.theme=dark?'light':'dark';
+});
+grp=parse('a|b|cd|e');
+render();
+window.__test={analyze,parse};
+</script>
